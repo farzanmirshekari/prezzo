@@ -1,7 +1,24 @@
 import React from 'react'
 
-function Editor() {
-    return <div className="relative w-1/3 h-full"></div>
+interface Props {
+    presentation_markdown: string
+    set_presentation_markdown: (
+        e: React.ChangeEvent<HTMLTextAreaElement>
+    ) => void
+}
+
+function Editor({ presentation_markdown, set_presentation_markdown }: Props) {
+    return (
+        <div className="relative w-5/12 h-full">
+            <textarea
+                className="w-full h-full resize-none outline-0 text-justify"
+                value={presentation_markdown}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    set_presentation_markdown(e)
+                }
+            />
+        </div>
+    )
 }
 
 export default Editor
