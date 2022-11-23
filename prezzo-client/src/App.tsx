@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Editor from './components/Editor'
 import './App.css'
+import Deck from './components/Deck'
 
 function App() {
     const [state, set_state] = useState({
@@ -17,7 +18,8 @@ function App() {
     }
 
     return (
-        <div className="absolute w-full h-full flex flex-row justify-end">
+        <div className="absolute w-full h-full flex flex-row justify-start">
+            <Deck />
             <Editor
                 presentation_markdown={state.presentation_markdown}
                 set_presentation_markdown={set_presentation_markdown}
