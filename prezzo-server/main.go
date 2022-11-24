@@ -38,20 +38,30 @@ func deliver_message(c *gin.Context) {
 func parse_presentation_content(c *gin.Context) {
 	var presentation_content raw_content
 	c.BindJSON(&presentation_content)
-	split_into_slides(&presentation_content)
+	slides := split_into_slides(&presentation_content)
+	c.JSON(http.StatusOK, slides)
 }
 
-func split_into_slides(presentation_content *raw_content) {
+func split_into_slides(presentation_content *raw_content) []slide {
 	slide_delimiter := "---"
 	title_delimiter := "##"
 	body_delimiter_regex := regexp.MustCompile(`<-\s*(.*?)\s*->`)
 	slides_body_array := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
 	slides_titles := make([]string, len(slides_body_array))
 	slides_body := make([]string, len(slides_body_array))
+	slides := make([]slide, len(slides_body_array))
 	for i := range slides_body_array {
 		slides_titles[i] = filter_string_by_delimiter(slides_body_array[i], title_delimiter)[0]
 		slides_body[i] = filter_string_by_regex(slides_body_array[i], body_delimiter_regex)[0][1]
+		slides[i] = slide{
+			Index: i,
+			Content: slide_text_content{
+				Title: slides_titles[i],
+				Body:  slides_body[i],
+			},
+		}
 	}
+	return slides
 }
 
 func filter_string_by_delimiter(s string, delimiter string) []string {
