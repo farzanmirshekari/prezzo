@@ -1,15 +1,21 @@
-import React from "react";
-import Slide from "./Slide";
+import React from 'react'
+import { Presentation_Slide } from '../interfaces/interface-models'
+import Slide from './Slide'
 
-function Deck() {
-    return (
-        <div className="relative w-7/12 h-full overflow-y-scroll slide_deck">
-            <Slide header="Header 1" body="Body 1" />
-            <Slide header="Header 2" body="Body 2" />
-            <Slide header="Header 3" body="Body 3" />
-            <Slide header="Header 4" body="Body 4" />
-        </div>
-    );
+interface Props {
+    presentation_slides: Presentation_Slide[]
 }
 
-export default Deck;
+function Deck({ presentation_slides }: Props) {
+    return (
+        <div className="relative w-7/12 h-full overflow-y-scroll slide_deck">
+            {presentation_slides.map((slide, index) => {
+                return (
+                    <Slide key={index} header={slide.title} body={slide.body} />
+                )
+            })}
+        </div>
+    )
+}
+
+export default Deck

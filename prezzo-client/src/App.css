@@ -5,8 +5,12 @@ textarea {
     padding: 1.5rem 4rem;
 }
 
+.slide {
+    margin: 0.5rem 0 0.5rem 0;
+}
+
 .slide_deck {
-    background-color: #4f4d4f;
+    background-color: #1c1a1c;
 }
 
 .slide_deck::-webkit-scrollbar {
