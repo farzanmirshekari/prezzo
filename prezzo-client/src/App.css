@@ -4,3 +4,11 @@ textarea {
     font-family: Consolas, monaco, monospace;
     padding: 1.5rem 4rem;
 }
+
+.slide_deck {
+    background-color: #4f4d4f;
+}
+
+.slide_deck::-webkit-scrollbar {
+    display: none;
+}

@@ -13,17 +13,14 @@ type raw_content struct {
 }
 
 type slide struct {
-	Index   int                `json:"index"`
-	Content slide_text_content `json:"content"`
-}
-
-type slide_text_content struct {
+	Index int    `json:"index"`
 	Title string `json:"title"`
 	Body  string `json:"body"`
 }
 
 func main() {
 	router := gin.Default()
+	router.Use(CORS_middleware())
 	router.GET("/", deliver_message)
 	router.POST("/presentation_content", parse_presentation_content)
 	router.Run("localhost:8080")
@@ -55,10 +52,8 @@ func split_into_slides(presentation_content *raw_content) []slide {
 		slides_body[i] = filter_string_by_regex(slides_body_array[i], body_delimiter_regex)[0][1]
 		slides[i] = slide{
 			Index: i,
-			Content: slide_text_content{
-				Title: slides_titles[i],
-				Body:  slides_body[i],
-			},
+			Title: slides_titles[i],
+			Body:  slides_body[i],
 		}
 	}
 	return slides
@@ -71,4 +66,20 @@ func filter_string_by_delimiter(s string, delimiter string) []string {
 
 func filter_string_by_regex(s string, regex *regexp.Regexp) [][]string {
 	return regex.FindAllStringSubmatch(s, -1)
+}
+
+func CORS_middleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Credentials", "true")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH,OPTIONS,GET,PUT")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
 }

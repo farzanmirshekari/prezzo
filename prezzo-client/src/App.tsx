@@ -2,10 +2,14 @@ import React, { useState } from 'react'
 import Editor from './components/Editor'
 import './App.css'
 import Deck from './components/Deck'
+import { State} from './interfaces/interface-models'
 
 function App() {
-    const [state, set_state] = useState({
-        presentation_markdown: '',
+    const [state, set_state] = useState<State>({
+        presenatation_markdown: '',
+        presentation_slides: {
+            slides: []
+        }
     })
 
     const set_presentation_markdown = (
@@ -13,7 +17,7 @@ function App() {
     ) => {
         set_state({
             ...state,
-            presentation_markdown: e.target.value,
+            presenatation_markdown: e.target.value
         })
     }
 
@@ -21,7 +25,7 @@ function App() {
         <div className="absolute w-full h-full flex flex-row justify-start">
             <Deck />
             <Editor
-                presentation_markdown={state.presentation_markdown}
+                presentation_markdown={state.presenatation_markdown}
                 set_presentation_markdown={set_presentation_markdown}
             />
         </div>

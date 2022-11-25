@@ -9,7 +9,7 @@ interface Props {
 
 function Editor({ presentation_markdown, set_presentation_markdown }: Props) {
     return (
-        <div className="relative w-5/12 h-full">
+        <div className="relative w-5/12 h-full overflow-y-hidden">
             <textarea
                 className="w-full h-full resize-none outline-0 text-justify"
                 value={presentation_markdown}
