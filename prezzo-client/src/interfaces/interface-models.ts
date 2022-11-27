@@ -1,5 +1,5 @@
 export interface Presentation_Slide {
-    title: string
+    header: string
     body: string
 }
 

@@ -13,9 +13,9 @@ type raw_content struct {
 }
 
 type slide struct {
-	Index int    `json:"index"`
-	Title string `json:"title"`
-	Body  string `json:"body"`
+	Index  int    `json:"index"`
+	Header string `json:"header"`
+	Body   string `json:"body"`
 }
 
 func main() {
@@ -41,26 +41,29 @@ func parse_presentation_content(c *gin.Context) {
 
 func split_into_slides(presentation_content *raw_content) []slide {
 	slide_delimiter := "---"
-	title_delimiter := "##"
-	body_delimiter_regex := regexp.MustCompile(`<-\s*(.*?)\s*->`)
-	slides_body_array := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
-	slides_titles := make([]string, len(slides_body_array))
-	slides_body := make([]string, len(slides_body_array))
-	slides := make([]slide, len(slides_body_array))
-	for i := range slides_body_array {
-		slides_titles[i] = filter_string_by_delimiter(slides_body_array[i], title_delimiter)[0]
-		slides_body[i] = filter_string_by_regex(slides_body_array[i], body_delimiter_regex)[0][1]
-		slides[i] = slide{
-			Index: i,
-			Title: slides_titles[i],
-			Body:  slides_body[i],
+	header_delimiter := "#"
+	body_delimiter := "~"
+	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
+	slides_headers := make([]string, len(slides))
+	slides_body := make([]string, len(slides))
+	parsed_slides := make([]slide, len(slides))
+	for i := range slides {
+		slides_headers[i] = filter_string_by_delimiter(slides[i], header_delimiter)[0]
+		slides_body[i] = filter_string_by_delimiter(slides[i], body_delimiter)[0]
+		parsed_slides[i] = slide{
+			Index:  i,
+			Header: slides_headers[i],
+			Body:   slides_body[i],
 		}
 	}
-	return slides
+	return parsed_slides
 }
 
 func filter_string_by_delimiter(s string, delimiter string) []string {
 	split_string := strings.Split(s, delimiter)
+	if len(split_string) == 1 {
+		return nil
+	}
 	return split_string[1 : len(split_string)-1]
 }
 

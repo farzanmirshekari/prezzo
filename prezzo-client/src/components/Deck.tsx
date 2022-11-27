@@ -11,7 +11,7 @@ function Deck({ presentation_slides }: Props) {
         <div className="relative w-7/12 h-full overflow-y-scroll slide_deck">
             {presentation_slides.map((slide, index) => {
                 return (
-                    <Slide key={index} header={slide.title} body={slide.body} />
+                    <Slide key={index} header={slide.header} body={slide.body} />
                 )
             })}
         </div>
