@@ -48,8 +48,8 @@ func split_into_slides(presentation_content *raw_content) []slide {
 	slides_body := make([]string, len(slides))
 	parsed_slides := make([]slide, len(slides))
 	for i := range slides {
-		slides_headers[i] = filter_string_by_delimiter(slides[i], header_delimiter)[0]
-		slides_body[i] = filter_string_by_delimiter(slides[i], body_delimiter)[0]
+		slides_headers[i] = validate_split_string(filter_string_by_delimiter(slides[i], header_delimiter))
+		slides_body[i] = validate_split_string(filter_string_by_delimiter(slides[i], body_delimiter))
 		parsed_slides[i] = slide{
 			Index:  i,
 			Header: slides_headers[i],
@@ -62,9 +62,16 @@ func split_into_slides(presentation_content *raw_content) []slide {
 func filter_string_by_delimiter(s string, delimiter string) []string {
 	split_string := strings.Split(s, delimiter)
 	if len(split_string) == 1 {
-		return nil
+		return []string{}
 	}
 	return split_string[1 : len(split_string)-1]
+}
+
+func validate_split_string(s []string) string {
+	if len(s) == 0 {
+		return ""
+	}
+	return s[0]
 }
 
 func filter_string_by_regex(s string, regex *regexp.Regexp) [][]string {
