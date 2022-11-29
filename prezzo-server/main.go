@@ -6,16 +6,23 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/muesli/gamut"
 )
 
 type raw_content struct {
 	Text_Content string `json:"text_content"`
 }
 
+type styles struct {
+	BackgroundColor string `json:"background_color"`
+	TextColor       string `json:"text_color"`
+}
+
 type slide struct {
 	Index  int    `json:"index"`
 	Header string `json:"header"`
 	Body   string `json:"body"`
+	Styles styles `json:"styles"`
 }
 
 func main() {
@@ -43,17 +50,28 @@ func split_into_slides(presentation_content *raw_content) []slide {
 	slide_delimiter := "---"
 	header_delimiter := "#"
 	body_delimiter := "~"
+	background_color_scheme_regex := regexp.MustCompile(`color_scheme:\s*(.*?)\s*;`)
+	text_color_regex := regexp.MustCompile(`text_color:\s*(.*?)\s*;`)
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
+	parsed_slides := make([]slide, len(slides))
 	slides_headers := make([]string, len(slides))
 	slides_body := make([]string, len(slides))
-	parsed_slides := make([]slide, len(slides))
+	slide_text_colors := make([]string, len(slides))
+	color_scheme := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), background_color_scheme_regex)
+	slide_background_colors := gamut.Tints(gamut.Hex(color_scheme), len(slides))
 	for i := range slides {
+		slide_text_colors[i] = filter_string_by_regex(purge_string(slides[i], " "), text_color_regex)
+		slides[i] = purge_string(slides[i], slide_text_colors[i])
 		slides_headers[i] = validate_split_string(filter_string_by_delimiter(slides[i], header_delimiter))
 		slides_body[i] = validate_split_string(filter_string_by_delimiter(slides[i], body_delimiter))
 		parsed_slides[i] = slide{
 			Index:  i,
 			Header: slides_headers[i],
 			Body:   slides_body[i],
+			Styles: styles{
+				BackgroundColor: gamut.ToHex(slide_background_colors[i]),
+				TextColor:       slide_text_colors[i],
+			},
 		}
 	}
 	return parsed_slides
@@ -74,8 +92,16 @@ func validate_split_string(s []string) string {
 	return s[0]
 }
 
-func filter_string_by_regex(s string, regex *regexp.Regexp) [][]string {
-	return regex.FindAllStringSubmatch(s, -1)
+func filter_string_by_regex(s string, regex *regexp.Regexp) string {
+	filtered_string := regex.FindAllStringSubmatch(s, -1)
+	if len(filtered_string) == 0 {
+		return ""
+	}
+	return filtered_string[0][1]
+}
+
+func purge_string(s string, to_cut string) string {
+	return strings.ReplaceAll(s, to_cut, "")
 }
 
 func CORS_middleware() gin.HandlerFunc {
