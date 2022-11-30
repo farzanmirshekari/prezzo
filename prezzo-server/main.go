@@ -28,15 +28,8 @@ type slide struct {
 func main() {
 	router := gin.Default()
 	router.Use(CORS_middleware())
-	router.GET("/", deliver_message)
 	router.POST("/presentation_content", parse_presentation_content)
 	router.Run("localhost:8080")
-}
-
-func deliver_message(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Prezzo server..",
-	})
 }
 
 func parse_presentation_content(c *gin.Context) {
@@ -52,13 +45,16 @@ func split_into_slides(presentation_content *raw_content) []slide {
 	body_delimiter := "~"
 	background_color_scheme_regex := regexp.MustCompile(`color_scheme:\s*(.*?)\s*;`)
 	text_color_regex := regexp.MustCompile(`text_color:\s*(.*?)\s*;`)
+
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
+	color_scheme := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), background_color_scheme_regex)
+	slide_background_colors := gamut.Tints(gamut.Hex(color_scheme), len(slides))
+
 	parsed_slides := make([]slide, len(slides))
 	slides_headers := make([]string, len(slides))
 	slides_body := make([]string, len(slides))
 	slide_text_colors := make([]string, len(slides))
-	color_scheme := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), background_color_scheme_regex)
-	slide_background_colors := gamut.Tints(gamut.Hex(color_scheme), len(slides))
+
 	for i := range slides {
 		slide_text_colors[i] = filter_string_by_regex(purge_string(slides[i], " "), text_color_regex)
 		slides[i] = purge_string(slides[i], slide_text_colors[i])
