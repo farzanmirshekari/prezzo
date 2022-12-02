@@ -2,11 +2,15 @@ textarea {
     background-color: #1c1a1c;
     color: rgb(232, 231, 231);
     font-family: Consolas, monaco, monospace;
-    padding: 1.5rem 4rem;
+    padding: 1.5rem 3rem;
 }
 
 .slide {
-    margin: 0.5rem 0 0.5rem 0;
+    margin: 0.5rem 0;
+}
+
+.pane {
+    background-color: #131113;
 }
 
 .slide_deck {

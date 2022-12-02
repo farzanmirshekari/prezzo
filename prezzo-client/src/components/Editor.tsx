@@ -1,4 +1,6 @@
 import React from 'react'
+import Pane from './micro-components/Pane'
+import Textbox from './micro-components/Textbox'
 
 interface Props {
     presentation_markdown: string
@@ -10,12 +12,10 @@ interface Props {
 function Editor({ presentation_markdown, set_presentation_markdown }: Props) {
     return (
         <div className="relative w-4/12 h-full overflow-y-hidden">
-            <textarea
-                className="w-full h-full resize-none outline-0 text-justify"
-                value={presentation_markdown}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                    set_presentation_markdown(e)
-                }
+            <Pane />
+            <Textbox
+                presentation_markdown={presentation_markdown}
+                set_presentation_markdown={set_presentation_markdown}
             />
         </div>
     )
