@@ -43,8 +43,8 @@ func split_into_slides(presentation_content *raw_content) []slide {
 	slide_delimiter := "---"
 	header_delimiter := "#"
 	body_delimiter := "~"
-	background_color_scheme_regex := regexp.MustCompile(`color_scheme:\s*(.*?)\s*;`)
-	text_color_regex := regexp.MustCompile(`text_color:\s*(.*?)\s*;`)
+	background_color_scheme_regex := regexp.MustCompile(`color-scheme:\s*(.*?)\s*;`)
+	text_color_regex := regexp.MustCompile(`text-color:\s*(.*?)\s*;`)
 
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
 	color_scheme := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), background_color_scheme_regex)
@@ -111,6 +111,7 @@ func CORS_middleware() gin.HandlerFunc {
 			c.AbortWithStatus(204)
 			return
 		}
+
 		c.Next()
 	}
 }
