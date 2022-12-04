@@ -5,6 +5,13 @@ textarea {
     padding: 1.5rem 3rem;
 }
 
+.button {
+    color: rgb(232, 231, 231);
+    border: 1px solid rgb(232, 231, 231);
+    background-color: #1c1a1c;
+    border-radius: 5px;
+}
+
 .slide {
     margin: 0.5rem 0;
 }
