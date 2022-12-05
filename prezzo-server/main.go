@@ -27,8 +27,14 @@ type slide struct {
 
 func main() {
 	router := gin.Default()
+	session := initialize_S3()
 	router.Use(CORS_middleware())
+	router.Use(func(c *gin.Context) {
+		c.Set("session", session)
+		c.Next()
+	})
 	router.POST("/presentation_content", parse_presentation_content)
+	router.POST("/image_upload", upload_image_to_S3)
 	router.Run("localhost:8080")
 }
 

@@ -5,18 +5,21 @@ textarea {
     padding: 1.5rem 3rem;
 }
 
+.button,
 .input {
     color: rgb(232, 231, 231);
-    border: 1px solid rgb(232, 231, 231);
-    background-color: #1c1a1c;
-    border-radius: 5px;
+    border-left: 1px solid rgb(232, 231, 231);
+    font-family: Consolas, monaco, monospace;
+    background-color: #131113;
 }
 
-.button {
-    color: rgb(232, 231, 231);
-    border: 1px solid rgb(232, 231, 231);
-    background-color: #1c1a1c;
-    border-radius: 5px;
+.button:hover,
+.input:hover {
+    filter: invert(0.9);
+}
+
+.icon {
+    filter: invert(1);
 }
 
 .slide {
