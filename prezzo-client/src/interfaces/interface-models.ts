@@ -10,6 +10,7 @@ export interface Presentation_Slide {
 }
 
 export interface State {
+    presentation_uuid: string
     presenatation_markdown: string
     presentation_slides: Presentation_Slide[]
 }

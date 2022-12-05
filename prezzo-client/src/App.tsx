@@ -4,11 +4,13 @@ import './App.css'
 import Deck from './components/Deck'
 import { State } from './interfaces/interface-models'
 import axios from 'axios'
+import {  v5 as uuidv5 } from 'uuid'
 
 function App() {
     const [state, set_state] = useState<State>({
         presenatation_markdown: '',
         presentation_slides: [],
+        presentation_uuid: uuidv5('prezzo', uuidv5.URL)
     })
 
     const set_presentation_markdown = (
