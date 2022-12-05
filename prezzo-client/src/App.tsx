@@ -4,13 +4,13 @@ import './App.css'
 import Deck from './components/Deck'
 import { State } from './interfaces/interface-models'
 import axios from 'axios'
-import {  v5 as uuidv5 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 
 function App() {
     const [state, set_state] = useState<State>({
         presenatation_markdown: '',
         presentation_slides: [],
-        presentation_uuid: uuidv5('prezzo', uuidv5.URL)
+        presentation_uuid: uuidv4()
     })
 
     const set_presentation_markdown = (
@@ -40,6 +40,7 @@ function App() {
         const file = e.target.files![0]
         const form_data = new FormData()
         form_data.append('image', file)
+        form_data.append('presentation_uuid', state.presentation_uuid)
         axios
             .post('http://localhost:8080/image_upload', form_data)
             .then((response) => {
