@@ -10,7 +10,7 @@ function App() {
     const [state, set_state] = useState<State>({
         presenatation_markdown: '',
         presentation_slides: [],
-        presentation_uuid: uuidv4()
+        presentation_uuid: uuidv4(),
     })
 
     const set_presentation_markdown = (
@@ -26,8 +26,10 @@ function App() {
         axios
             .post('http://localhost:8080/presentation_content', {
                 text_content: state.presenatation_markdown,
+                presentation_uuid: state.presentation_uuid,
             })
             .then((response) => {
+                console.log(response.data)
                 set_state({
                     ...state,
                     presentation_slides: response.data,

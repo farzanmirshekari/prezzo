@@ -6,10 +6,11 @@ import Header from './micro-components/Header'
 interface Props {
     header: string
     body: string
+    image: string
     styles: Slide_Styles
 }
 
-function Slide({ header, body, styles }: Props) {
+function Slide({ header, body, image, styles }: Props) {
     return (
         <div className="relative w-full aspect-video slide">
             <div
@@ -20,6 +21,7 @@ function Slide({ header, body, styles }: Props) {
                 }}
             >
                 <Header header={header} />
+                <img src={image} alt="slide" className="relative w-1/2" />
                 <Body body={body} />
             </div>
         </div>

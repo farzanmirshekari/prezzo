@@ -15,6 +15,7 @@ function Deck({ presentation_slides }: Props) {
                         key={index}
                         header={slide.header}
                         body={slide.body}
+                        image={slide.image}
                         styles={slide.styles}
                     />
                 )

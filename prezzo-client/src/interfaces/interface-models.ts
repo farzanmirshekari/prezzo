@@ -6,6 +6,7 @@ export interface Slide_Styles {
 export interface Presentation_Slide {
     header: string
     body: string
+    image: string
     styles: Slide_Styles
 }
 

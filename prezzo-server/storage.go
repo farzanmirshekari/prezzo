@@ -5,10 +5,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -65,4 +67,27 @@ func upload_image_to_S3(c *gin.Context) {
 		"message":  "success",
 		"uploader": upload,
 	})
+}
+
+func generate_signed_url_from_S3(presentation_uuid string, file_name string, c *gin.Context) string {
+
+	if (presentation_uuid == "") || (file_name == "") {
+		return ""
+	}
+
+	session := c.MustGet("session").(*session.Session)
+	service_client := s3.New(session)
+
+	request, _ := service_client.GetObjectRequest(&s3.GetObjectInput{
+		Bucket: aws.String(os.Getenv("AWS_BUCKET_NAME")),
+		Key:    aws.String(presentation_uuid + "/" + file_name),
+	})
+
+	url, err := request.Presign(15 * 60 * time.Second)
+
+	if err != nil {
+		fmt.Println("Failed to sign request..", err)
+	}
+
+	return url
 }
