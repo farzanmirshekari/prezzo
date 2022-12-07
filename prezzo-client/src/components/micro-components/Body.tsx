@@ -2,10 +2,11 @@ import React from 'react'
 
 interface Props {
     body: string
+    classes?: string
 }
 
-function Body({ body }: Props) {
-    return <p className="text-2xl text-center">{body}</p>
+function Body({ body, classes }: Props) {
+    return <p className={classes ? classes : 'text-center text-2xl'}>{body}</p>
 }
 
 export default Body

@@ -21,7 +21,6 @@ function Slide({ header, body, image, styles }: Props) {
                 }}
             >
                 <Header header={header} />
-                <img src={image} alt="slide" className="relative w-1/2" />
                 <Body body={body} />
             </div>
         </div>
