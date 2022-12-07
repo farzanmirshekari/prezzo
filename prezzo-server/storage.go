@@ -69,13 +69,17 @@ func upload_image_to_S3(c *gin.Context) {
 	})
 }
 
-func generate_signed_url_from_S3(presentation_uuid string, file_name string, c *gin.Context) string {
+func generate_signed_url_from_S3(file_name string) string {
 
 	if (presentation_uuid == "") || (file_name == "") {
 		return ""
 	}
 
-	session := c.MustGet("session").(*session.Session)
+	if url, ok := images_map[file_name]; ok {
+		return url
+	}
+
+	session := initialize_S3()
 	service_client := s3.New(session)
 
 	request, _ := service_client.GetObjectRequest(&s3.GetObjectInput{
@@ -89,5 +93,11 @@ func generate_signed_url_from_S3(presentation_uuid string, file_name string, c *
 		fmt.Println("Failed to sign request..", err)
 	}
 
+	images_map[file_name] = url
+
 	return url
+}
+
+func check_if_signed_url_is_valid(signed_url string) {
+	// TODO
 }

@@ -26,6 +26,9 @@ type slide struct {
 	Styles styles `json:"styles"`
 }
 
+var presentation_uuid string
+var images_map map[string]string = make(map[string]string)
+
 func main() {
 	router := gin.Default()
 	session := initialize_S3()
@@ -42,11 +45,17 @@ func main() {
 func parse_presentation_content(c *gin.Context) {
 	var presentation_content raw_content
 	c.BindJSON(&presentation_content)
-	slides := split_into_slides(&presentation_content, c)
+	slides := split_into_slides(&presentation_content)
 	c.JSON(http.StatusOK, slides)
 }
 
-func split_into_slides(presentation_content *raw_content, c *gin.Context) []slide {
+func split_into_slides(presentation_content *raw_content) []slide {
+
+	if presentation_uuid != presentation_content.UUID {
+		presentation_uuid = presentation_content.UUID
+		images_map = make(map[string]string)
+	}
+
 	slide_delimiter := "---"
 	header_delimiter := "#"
 	body_delimiter := "~"
@@ -69,7 +78,7 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 		slides[i] = purge_string(slides[i], slide_text_colors[i])
 		slides_headers[i] = validate_split_string(filter_string_by_delimiter(slides[i], header_delimiter))
 		slides_body[i] = validate_split_string(filter_string_by_delimiter(slides[i], body_delimiter))
-		slide_images[i] = generate_signed_url_from_S3(presentation_content.UUID, filter_string_by_regex(slides[i], image_name_regex), c)
+		slide_images[i] = generate_signed_url_from_S3(filter_string_by_regex(slides[i], image_name_regex))
 
 		parsed_slides[i] = slide{
 			Index:  i,
