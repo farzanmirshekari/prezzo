@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -75,7 +76,7 @@ func generate_signed_url_from_S3(file_name string) string {
 		return ""
 	}
 
-	if url, ok := images_map[file_name]; ok {
+	if url, ok := images_map[file_name]; ok && check_if_signed_url_is_valid(url) {
 		return url
 	}
 
@@ -98,6 +99,10 @@ func generate_signed_url_from_S3(file_name string) string {
 	return url
 }
 
-func check_if_signed_url_is_valid(signed_url string) {
-	// TODO
+func check_if_signed_url_is_valid(signed_url string) bool {
+	url_expiry_regex := regexp.MustCompile(`&X-Amz-Date=\s*(.*?)\s*&`)
+	url_expirty_ISO8601 := filter_string_by_regex(signed_url, url_expiry_regex)
+	url_expiry_UTC, _ := time.Parse(time.RFC3339, url_expirty_ISO8601)
+	url_expiry_UTC = url_expiry_UTC.UTC()
+	return !time.Now().After(url_expiry_UTC)
 }
