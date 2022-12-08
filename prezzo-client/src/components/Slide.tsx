@@ -23,32 +23,54 @@ function Slide({ header, body, image, styles }: Props) {
             >
                 {header && !body && !image && (
                     <>
-                        <Header header={header} classes='relative w-4/5 h-full left-20 top-20 text-8xl'/>
+                        <Header
+                            header={header}
+                            classes="relative w-4/5 h-full left-20 top-20 text-8xl"
+                        />
                     </>
                 )}
                 {header && body && !image && (
                     <>
-                        <Header header={header} classes='relative w-5/12 text-7xl top-10 left-16 float-left' />
-                        <div id='filler' className='relative w-2/12'></div>
-                        <Body body={body} classes='relative w-5/12 text-4xl top-10' />
+                        <Header
+                            header={header}
+                            classes="relative w-5/12 text-7xl top-10 left-16 float-left"
+                        />
+                        <div id="filler" className="relative w-2/12"></div>
+                        <Body
+                            body={body}
+                            classes="relative w-5/12 text-4xl top-10"
+                        />
                     </>
                 )}
                 {}
                 {image && header && body && (
                     <>
-                        <div className='relative w-2/5 h-full flex flex-col justify-start'>
-                            <Header header={header} classes='relative w-3/5 text-left text-6xl'/>
-                            <Body body={body} classes='relative w-3/5 text-left text-2xl'/>
+                        <div className="relative w-2/5 h-full flex flex-col justify-start">
+                            <Header
+                                header={header}
+                                classes="relative w-3/5 text-left text-6xl"
+                            />
+                            <Body
+                                body={body}
+                                classes="relative w-3/5 text-left text-2xl"
+                            />
                         </div>
-                        <div className='relative w-3/5 h-full flex justify-end items-center'>
-                            <Image image_source={image} image_alt='Image Alt..'
-                             classes='relative w-1/2 object-cover'/>
+                        <div className="relative w-3/5 h-full flex justify-end items-center">
+                            <Image
+                                image_source={image}
+                                image_alt="Image Alt.."
+                                classes="relative w-1/2 object-cover"
+                            />
                         </div>
                     </>
                 )}
                 {image && !header && !body && (
                     <>
-                        <Image image_source={image} image_alt='Image Alt..' classes='relative w-full object-cover'/>
+                        <Image
+                            image_source={image}
+                            image_alt="Image Alt.."
+                            classes="relative w-full object-cover"
+                        />
                     </>
                 )}
             </div>
