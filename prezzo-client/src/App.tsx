@@ -29,7 +29,6 @@ function App() {
                 presentation_uuid: state.presentation_uuid,
             })
             .then((response) => {
-                console.log(response.data)
                 set_state({
                     ...state,
                     presentation_slides: response.data,

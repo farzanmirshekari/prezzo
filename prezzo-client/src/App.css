@@ -1,3 +1,7 @@
+* {
+    font-family: Consolas, monaco, monospace;
+}
+
 textarea {
     background-color: #1c1a1c;
     color: rgb(232, 231, 231);
