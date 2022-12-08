@@ -45,21 +45,21 @@ function Slide({ header, body, image, styles }: Props) {
                 {}
                 {image && header && body && (
                     <>
-                        <div className="relative w-2/5 h-full flex flex-col justify-start">
+                        <div className="relative w-2/5 h-full flex flex-col justify-start gap-16">
                             <Header
                                 header={header}
-                                classes="relative w-3/5 text-left text-6xl"
+                                classes="relative w-full left-8 top-6 text-left text-6xl"
                             />
                             <Body
                                 body={body}
-                                classes="relative w-3/5 text-left text-2xl"
+                                classes="relative w-full left-8 text-left text-2xl"
                             />
                         </div>
                         <div className="relative w-3/5 h-full flex justify-end items-center">
                             <Image
                                 image_source={image}
                                 image_alt="Image Alt.."
-                                classes="relative w-1/2 object-cover"
+                                classes="relative h-full object-cover"
                             />
                         </div>
                     </>
