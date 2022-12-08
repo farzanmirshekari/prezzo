@@ -33,16 +33,34 @@ function Slide({ header, body, image, styles }: Props) {
                     <>
                         <Header
                             header={header}
-                            classes="relative w-5/12 text-7xl top-10 left-16 float-left"
+                            classes="relative w-5/12 text-7xl top-10 left-16"
                         />
                         <div id="filler" className="relative w-2/12"></div>
                         <Body
                             body={body}
-                            classes="relative w-5/12 text-4xl top-10"
+                            classes="relative w-5/12 text-4xl top-14"
                         />
                     </>
                 )}
-                {}
+                {header && !body && image && (
+                    <>
+                        <Header header={header} classes="relative w-5/12 text-8xl top-4 left-12"/>
+                        <div id="filler" className="relative w-2/12"></div>
+                        <Image image_source={image} image_alt="Image Alt.." classes="relative w-1/2 object-cover"/>
+                    </>
+                )}
+                {!header && body && !image && (
+                    <div className='relative w-full h-full flex justify-center items-start'>
+                        <Body body={body} classes="relative w-10/12 text-4xl top-12 leading-15"/>
+                    </div>
+                )}
+                {!header && body && image && (
+                    <>
+                        <Body body={body} classes="relative w-5/12 text-4xl top-8 left-12 leading-12"/>
+                        <div id="filler" className="relative w-2/12"></div>
+                        <Image image_source={image} image_alt="Image Alt.." classes="relative w-1/2 object-cover"/>
+                    </>
+                )}
                 {header && body && image && (
                     <>
                         <div className="relative w-2/5 h-full flex flex-col justify-start gap-16">
@@ -64,7 +82,7 @@ function Slide({ header, body, image, styles }: Props) {
                         </div>
                     </>
                 )}
-                {image && !header && !body && (
+                {!header && !body && image && (
                     <>
                         <Image
                             image_source={image}

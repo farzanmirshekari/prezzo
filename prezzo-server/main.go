@@ -66,7 +66,7 @@ func split_into_slides(presentation_content *raw_content) []slide {
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
 	color_scheme := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), background_color_scheme_regex)
 	if color_scheme == "" {
-		color_scheme = "#227a79"
+		color_scheme = "#427ef5"
 	}
 	slide_background_colors := gamut.Tints(gamut.Hex(color_scheme), len(slides)*2)
 
