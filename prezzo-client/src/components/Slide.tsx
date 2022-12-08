@@ -43,7 +43,7 @@ function Slide({ header, body, image, styles }: Props) {
                     </>
                 )}
                 {}
-                {image && header && body && (
+                {header && body && image && (
                     <>
                         <div className="relative w-2/5 h-full flex flex-col justify-start gap-16">
                             <Header
