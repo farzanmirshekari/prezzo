@@ -1,7 +1,5 @@
 import React from 'react'
 
-function Presenter() {
-
-}
+function Presenter() {}
 
 export default Presenter
