@@ -38,15 +38,15 @@ function Slide({ header, body, image, styles }: Props) {
                         <div id="filler" className="relative w-2/12"></div>
                         <Body
                             body={body}
-                            classes="relative w-5/12 text-4xl top-14"
+                            classes="relative w-5/12 text-4xl top-14 right-8"
                         />
                     </>
                 )}
                 {header && !body && image && (
                     <>
-                        <Header header={header} classes="relative w-5/12 text-8xl top-4 left-12"/>
-                        <div id="filler" className="relative w-2/12"></div>
-                        <Image image_source={image} image_alt="Image Alt.." classes="relative w-1/2 object-cover"/>
+                        <Header header={header} classes="relative w-4/12 text-8xl top-6 left-10"/>
+                        <div id="filler" className="relative w-3/12"></div>
+                        <Image image_source={image} image_alt="Image Alt.." classes="relative w-5/12 object-cover"/>
                     </>
                 )}
                 {!header && body && !image && (
