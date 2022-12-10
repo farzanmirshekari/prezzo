@@ -5,10 +5,12 @@ import Deck from './components/Deck'
 import { State } from './interfaces/interface-models'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
+import Presenter from './components/Presenter'
 
 function App() {
     const [state, set_state] = useState<State>({
         presenatation_markdown: '',
+        presentation_mode: false,
         presentation_slides: [],
         presentation_uuid: uuidv4(),
     })
@@ -49,14 +51,32 @@ function App() {
             })
     }
 
+    const set_presentation_mode = () => {
+        set_state({
+            ...state,
+            presentation_mode: !state.presentation_mode,
+        })
+    }
+
     return (
         <div className="absolute w-full h-full flex flex-row justify-start">
-            <Deck presentation_slides={state.presentation_slides} />
-            <Editor
-                presentation_markdown={state.presenatation_markdown}
-                set_presentation_markdown={set_presentation_markdown}
-                upload_image={upload_image}
-            />
+            {
+                !state.presentation_mode && (
+                    <>
+                        <Deck presentation_slides={state.presentation_slides} />
+                        <Editor
+                            presentation_markdown={state.presenatation_markdown}
+                            set_presentation_markdown={set_presentation_markdown}
+                            upload_image={upload_image}
+                            start_presentation={set_presentation_mode}
+                        />
+                    </>
+                )
+            }
+            {
+                state.presentation_mode && (
+                    <Presenter />
+            }
         </div>
     )
 }
