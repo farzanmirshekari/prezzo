@@ -16,10 +16,7 @@ function Pane({ upload_image, button_function }: Props) {
                 input_placeholder="Upload Image"
                 input_function={upload_image}
             />
-            <Button
-                button_text="Present" 
-                button_function={button_function}
-            />
+            <Button button_text="Present" button_function={button_function} />
         </div>
     )
 }

@@ -60,23 +60,20 @@ function App() {
 
     return (
         <div className="absolute w-full h-full flex flex-row justify-start">
-            {
-                !state.presentation_mode && (
-                    <>
-                        <Deck presentation_slides={state.presentation_slides} />
-                        <Editor
-                            presentation_markdown={state.presenatation_markdown}
-                            set_presentation_markdown={set_presentation_markdown}
-                            upload_image={upload_image}
-                            start_presentation={set_presentation_mode}
-                        />
-                    </>
-                )
-            }
-            {
-                state.presentation_mode && (
-                    <Presenter />
-            }
+            {!state.presentation_mode && (
+                <>
+                    <Deck presentation_slides={state.presentation_slides} />
+                    <Editor
+                        presentation_markdown={state.presenatation_markdown}
+                        set_presentation_markdown={set_presentation_markdown}
+                        upload_image={upload_image}
+                        start_presentation={set_presentation_mode}
+                    />
+                </>
+            )}
+            {state.presentation_mode && (
+                <Presenter presentation_slides={state.presentation_slides} />
+            )}
         </div>
     )
 }

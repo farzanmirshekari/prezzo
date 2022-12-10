@@ -19,7 +19,7 @@ function Editor({
 }: Props) {
     return (
         <div className="relative w-4/12 h-full overflow-y-hidden">
-            <Pane 
+            <Pane
                 upload_image={upload_image}
                 button_function={start_presentation}
             />
