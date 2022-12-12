@@ -2,7 +2,7 @@ import React from 'react'
 
 interface Props {
     input_type: string
-    accepted_file_types?: string
+    accepted_file_types: string
     input_placeholder: string
     input_function: (event: React.ChangeEvent<HTMLInputElement>) => void
 }

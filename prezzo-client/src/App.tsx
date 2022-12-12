@@ -37,7 +37,6 @@ function App() {
     }, [])
 
     useEffect(() => {
-        console.log(state.presenatation_markdown)
         if (state.websocket.readyState === 1) {
             state.websocket.send(
                 JSON.stringify({
@@ -82,7 +81,11 @@ function App() {
                 </>
             )}
             {state.presentation_mode && (
-                <Presenter presentation_slides={state.presentation_slides} />
+                <>
+                    <Presenter
+                        presentation_slides={state.presentation_slides}
+                    />
+                </>
             )}
         </div>
     )
