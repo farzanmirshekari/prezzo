@@ -83,6 +83,15 @@ func generate_signed_url_from_S3(file_name string) string {
 	session := initialize_S3()
 	service_client := s3.New(session)
 
+	_, err := service_client.HeadObject(&s3.HeadObjectInput{
+		Bucket: aws.String(os.Getenv("AWS_BUCKET_NAME")),
+		Key:    aws.String(presentation_uuid + "/" + file_name),
+	})
+
+	if err != nil {
+		return ""
+	}
+
 	request, _ := service_client.GetObjectRequest(&s3.GetObjectInput{
 		Bucket: aws.String(os.Getenv("AWS_BUCKET_NAME")),
 		Key:    aws.String(presentation_uuid + "/" + file_name),
@@ -91,7 +100,7 @@ func generate_signed_url_from_S3(file_name string) string {
 	url, err := request.Presign(15 * 60 * time.Second)
 
 	if err != nil {
-		fmt.Println("Failed to sign request..", err)
+		return ""
 	}
 
 	images_map[file_name] = url
