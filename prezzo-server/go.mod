@@ -7,6 +7,7 @@ require github.com/gin-gonic/gin v1.8.1
 require (
 	github.com/aws/aws-sdk-go v1.44.152 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
+	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect

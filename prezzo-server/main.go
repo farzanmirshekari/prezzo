@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"regexp"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 	"github.com/muesli/gamut"
 )
 
@@ -26,6 +28,14 @@ type slide struct {
 	Styles styles `json:"styles"`
 }
 
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
 var presentation_uuid string
 var images_map map[string]string = make(map[string]string)
 
@@ -37,16 +47,30 @@ func main() {
 		c.Set("session", session)
 		c.Next()
 	})
-	router.POST("/presentation_content", parse_presentation_content)
+	router.GET("/presentation_content", parse_presentation_content)
 	router.POST("/image_upload", upload_image_to_S3)
 	router.Run("localhost:8080")
 }
 
 func parse_presentation_content(c *gin.Context) {
-	var presentation_content raw_content
-	c.BindJSON(&presentation_content)
-	slides := split_into_slides(&presentation_content)
-	c.JSON(http.StatusOK, slides)
+	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer ws.Close()
+	for {
+		var presentation_content raw_content
+		err := ws.ReadJSON(&presentation_content)
+		if err != nil {
+			break
+		}
+		slides := split_into_slides(&presentation_content)
+		err = ws.WriteJSON(slides)
+		if err != nil {
+			break
+		}
+	}
 }
 
 func split_into_slides(presentation_content *raw_content) []slide {
