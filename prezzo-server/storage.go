@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -14,6 +16,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gin-gonic/gin"
+	"github.com/goccy/go-json"
 	"github.com/joho/godotenv"
 )
 
@@ -68,6 +71,68 @@ func upload_image_to_S3(c *gin.Context) {
 		"message":  "success",
 		"uploader": upload,
 	})
+}
+
+func save_presentation_to_S3(c *gin.Context, parsed_slides []slide) {
+	session := initialize_S3()
+	uploader := s3manager.NewUploader(session)
+	bucket := os.Getenv("AWS_BUCKET_NAME")
+
+	slides_json, err := json.Marshal(parsed_slides)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+	}
+
+	upload, err := uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(presentation_uuid + "/presentation.json"),
+		Body:   io.NopCloser(bytes.NewReader(slides_json)),
+	})
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message":  err.Error(),
+			"uploader": upload,
+		})
+	}
+}
+
+func load_presentation_from_S3(existing_presentation_ID string) []slide {
+	session := initialize_S3()
+	service_client := s3.New(session)
+
+	_, err := service_client.HeadObject(&s3.HeadObjectInput{
+		Bucket: aws.String(os.Getenv("AWS_BUCKET_NAME")),
+		Key:    aws.String(existing_presentation_ID + "/presentation.json"),
+	})
+
+	if err != nil {
+		return []slide{}
+	}
+
+	result, err := service_client.GetObject(&s3.GetObjectInput{
+		Bucket: aws.String(os.Getenv("AWS_BUCKET_NAME")),
+		Key:    aws.String(existing_presentation_ID + "/presentation.json"),
+	})
+
+	if err != nil {
+		return []slide{}
+	}
+
+	buffer := new(bytes.Buffer)
+	buffer.ReadFrom(result.Body)
+	buffer_string := buffer.String()
+
+	var slides []slide
+	err = json.Unmarshal([]byte(buffer_string), &slides)
+
+	if err != nil {
+		return []slide{}
+	}
+
+	return slides
 }
 
 func generate_signed_url_from_S3(file_name string) string {

@@ -48,8 +48,14 @@ func main() {
 		c.Next()
 	})
 	router.GET("/presentation_content", parse_presentation_content)
+	router.GET("/existing_presentation", get_existing_presentation)
 	router.POST("/image_upload", upload_image_to_S3)
 	router.Run("localhost:8080")
+}
+
+func get_existing_presentation(c *gin.Context) {
+	existing_presentation_uuid := c.Query("presentation_uuid")
+	c.JSON(http.StatusOK, gin.H{"presentation": load_presentation_from_S3(existing_presentation_uuid)})
 }
 
 func parse_presentation_content(c *gin.Context) {
@@ -66,6 +72,7 @@ func parse_presentation_content(c *gin.Context) {
 			break
 		}
 		slides := split_into_slides(&presentation_content)
+		save_presentation_to_S3(c, slides)
 		err = ws.WriteJSON(slides)
 		if err != nil {
 			break
@@ -86,9 +93,17 @@ func split_into_slides(presentation_content *raw_content) []slide {
 	background_color_scheme_regex := regexp.MustCompile(`color-scheme:\s*(.*?)\s*;`)
 	text_color_regex := regexp.MustCompile(`text-color:\s*(.*?)\s*;`)
 	image_name_regex := regexp.MustCompile(`/assets/\s*(.*?)\s*;`)
+	existing_presentation_regex := regexp.MustCompile(`load-existing:\s*(.*?)\s*;`)
 
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
 	color_scheme := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), background_color_scheme_regex)
+	existing_presentation := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), existing_presentation_regex)
+
+	// if existing_presentation exists, load the presentation from S3 and return it
+	if existing_presentation != "" {
+		return load_presentation_from_S3(existing_presentation)
+	}
+
 	if color_scheme == "" {
 		color_scheme = "#427ef5"
 	}

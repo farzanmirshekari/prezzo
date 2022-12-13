@@ -9,13 +9,18 @@ interface Props {
 
 function Textbox({ presentation_markdown, set_presentation_markdown }: Props) {
     return (
-        <textarea
-            className="w-full h-full resize-none outline-0 text-justify"
-            value={presentation_markdown}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                set_presentation_markdown(e)
-            }
-        />
+        <div className='relative w-full h-full justify-center items-start'>
+            <input
+                type='text'
+            />
+            <textarea
+                className="w-full h-full resize-none outline-0 text-justify"
+                value={presentation_markdown}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    set_presentation_markdown(e)
+                }
+            />
+        </div>
     )
 }
 
