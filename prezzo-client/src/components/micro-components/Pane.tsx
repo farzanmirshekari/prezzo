@@ -9,7 +9,8 @@ interface Props {
 
 function Pane({ upload_image, button_function }: Props) {
     return (
-        <div className="relative w-full h-12 flex flex-row items-center justify-end pane">
+        <div className="relative w-full h-12 flex flex-row items-center pane">
+            <Button button_function={() => {}} button_text="Open Existing" />
             <Input
                 input_type="file"
                 accepted_file_types="image/*"

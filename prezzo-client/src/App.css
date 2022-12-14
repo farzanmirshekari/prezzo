@@ -9,6 +9,11 @@ textarea {
     padding: 1.5rem 3rem;
 }
 
+.existing_presentation {
+    background-color: #242325;
+    color: rgb(232, 231, 231);
+}
+
 .button,
 .input {
     color: rgb(232, 231, 231);
@@ -32,6 +37,10 @@ textarea {
 
 .pane {
     background-color: #131113;
+}
+
+.button:first-of-type {
+    border-left: none;
 }
 
 .slide_deck {
