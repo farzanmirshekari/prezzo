@@ -9,14 +9,14 @@ interface Props {
 
 function Textbox({ presentation_markdown, set_presentation_markdown }: Props) {
     return (
-        <div className='relative w-full h-full justify-center items-start'>
-            <div className='relative w-full h-min flex flex-row items-center existing_presentation'>
-                <span className='relative w-min whitespace-nowrap h-full flex items-center pt-2 pb-2 pl-4 pr-4 bg-transparent'>
+        <div className="relative w-full h-full justify-center items-start">
+            <div className="relative w-full h-min flex flex-row items-center existing_presentation">
+                <span className="relative w-min whitespace-nowrap h-full flex items-center pt-2 pb-2 pl-4 pr-4 bg-transparent">
                     Presentation UUID:
                 </span>
                 <input
-                    type='text'
-                    className='relative w-full h-full pt-2 pb-2 outline-0 bg-transparent'
+                    type="text"
+                    className="relative w-full h-full pt-2 pb-2 outline-0 bg-transparent"
                 />
             </div>
             <textarea
