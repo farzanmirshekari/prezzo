@@ -9,9 +9,15 @@ textarea {
     padding: 1.5rem 3rem;
 }
 
+.textbox_container {
+    background-color: #1c1a1c;
+}
+
 .existing_presentation {
     background-color: #242325;
     color: rgb(232, 231, 231);
+    animation-duration: 1s;
+    animation-name: slide_right;
 }
 
 .button,
@@ -53,4 +59,13 @@ textarea {
 
 .slide_deck::-webkit-scrollbar {
     display: none;
+}
+
+@keyframes slide_right {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
 }

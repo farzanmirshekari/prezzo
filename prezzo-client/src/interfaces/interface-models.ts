@@ -12,10 +12,15 @@ export interface Presentation_Slide {
     styles: Slide_Styles
 }
 
-export interface State {
+export interface Presentation_State {
     websocket: w3cwebsocket
     presentation_uuid: string
-    presentation_mode: boolean
+    existing_presentation_uuid: string
     presenatation_markdown: string
     presentation_slides: Presentation_Slide[]
+}
+
+export interface User_Interface_State {
+    presentation_mode: boolean
+    should_take_in_existing_presentation_uuid: boolean
 }
