@@ -161,6 +161,9 @@ function App() {
                         presentation_slides={
                             presentation_state.presentation_slides
                         }
+                        current_slide_index={
+                            user_interface_state.presenter.current_slide_index
+                        }
                     />
                 </>
             )}

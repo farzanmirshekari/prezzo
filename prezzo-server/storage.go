@@ -71,12 +71,12 @@ func upload_image_to_S3(c *gin.Context) {
 	})
 }
 
-func save_presentation_to_S3(presentation_content *raw_content) {
+func save_presentation_to_S3(presentation_content *raw_content, c *gin.Context) {
 	if presentation_content.UUID == "" {
 		return
 	}
 
-	session := initialize_S3()
+	session := c.MustGet("session").(*session.Session)
 	uploader := s3manager.NewUploader(session)
 	bucket := os.Getenv("AWS_BUCKET_NAME")
 
@@ -97,8 +97,8 @@ func save_presentation_to_S3(presentation_content *raw_content) {
 	}
 }
 
-func load_presentation_from_S3(existing_presentation_ID string) raw_content {
-	session := initialize_S3()
+func load_presentation_from_S3(existing_presentation_ID string, c *gin.Context) raw_content {
+	session := c.MustGet("session").(*session.Session)
 	service_client := s3.New(session)
 
 	_, err := service_client.HeadObject(&s3.HeadObjectInput{
@@ -133,7 +133,7 @@ func load_presentation_from_S3(existing_presentation_ID string) raw_content {
 	return content
 }
 
-func generate_signed_url_from_S3(file_name string) string {
+func generate_signed_url_from_S3(file_name string, c *gin.Context) string {
 
 	if (presentation_uuid == "") || (file_name == "") {
 		return ""
@@ -143,7 +143,7 @@ func generate_signed_url_from_S3(file_name string) string {
 		return url
 	}
 
-	session := initialize_S3()
+	session := c.MustGet("session").(*session.Session)
 	service_client := s3.New(session)
 
 	_, err := service_client.HeadObject(&s3.HeadObjectInput{
