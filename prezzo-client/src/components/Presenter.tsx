@@ -3,7 +3,7 @@ import { Presentation_Slide } from '../interfaces/interface-models'
 import Slide from './Slide'
 
 interface Props {
-    presentation_slides: Presentation_Slide[],
+    presentation_slides: Presentation_Slide[]
     current_slide_index: number
 }
 

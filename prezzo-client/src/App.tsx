@@ -26,7 +26,7 @@ function App() {
         useState<User_Interface_State>({
             presenter: {
                 presentation_mode: false,
-                current_slide_index: 0
+                current_slide_index: 0,
             },
             should_take_in_existing_presentation_uuid: false,
         })
@@ -54,9 +54,6 @@ function App() {
     }, [presentation_state.presenatation_markdown])
 
     useEffect(() => {
-        if (presentation_state.existing_presentation_uuid === '') {
-            return
-        }
         if (validate(presentation_state.existing_presentation_uuid)) {
             axios
                 .get(
@@ -111,8 +108,9 @@ function App() {
             ...user_interface_state,
             presenter: {
                 ...user_interface_state.presenter,
-                presentation_mode: !user_interface_state.presenter.presentation_mode
-            }
+                presentation_mode:
+                    !user_interface_state.presenter.presentation_mode,
+            },
         })
     }
 
