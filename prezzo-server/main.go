@@ -54,8 +54,8 @@ func main() {
 }
 
 func get_existing_presentation(c *gin.Context) {
-	existing_presentation_uuid := c.Query("presentation_uuid")
-	c.JSON(http.StatusOK, gin.H{"presentation": load_presentation_from_S3(existing_presentation_uuid)})
+	// existing_presentation_uuid := c.Query("presentation_uuid")
+	// c.JSON(http.StatusOK, gin.H{"presentation": load_presentation_from_S3(existing_presentation_uuid)})
 }
 
 func parse_presentation_content(c *gin.Context) {
@@ -72,7 +72,7 @@ func parse_presentation_content(c *gin.Context) {
 			break
 		}
 		slides := split_into_slides(&presentation_content)
-		save_presentation_to_S3(c, slides)
+		save_presentation_to_S3(&presentation_content)
 		err = ws.WriteJSON(slides)
 		if err != nil {
 			break
@@ -95,14 +95,13 @@ func split_into_slides(presentation_content *raw_content) []slide {
 	image_name_regex := regexp.MustCompile(`/assets/\s*(.*?)\s*;`)
 	existing_presentation_regex := regexp.MustCompile(`load-existing:\s*(.*?)\s*;`)
 
+	existing_presentation := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), existing_presentation_regex)
+	if existing_presentation != "" {
+		load_presentation_from_S3(existing_presentation, presentation_content)
+	}
+
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
 	color_scheme := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), background_color_scheme_regex)
-	existing_presentation := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), existing_presentation_regex)
-
-	// if existing_presentation exists, load the presentation from S3 and return it
-	if existing_presentation != "" {
-		return load_presentation_from_S3(existing_presentation)
-	}
 
 	if color_scheme == "" {
 		color_scheme = "#427ef5"

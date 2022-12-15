@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -73,33 +72,29 @@ func upload_image_to_S3(c *gin.Context) {
 	})
 }
 
-func save_presentation_to_S3(c *gin.Context, parsed_slides []slide) {
+func save_presentation_to_S3(presentation_content *raw_content) {
 	session := initialize_S3()
 	uploader := s3manager.NewUploader(session)
 	bucket := os.Getenv("AWS_BUCKET_NAME")
 
-	slides_json, err := json.Marshal(parsed_slides)
+	presentation_content_json, err := json.Marshal(presentation_content)
+
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err.Error(),
-		})
+		return
 	}
 
-	upload, err := uploader.Upload(&s3manager.UploadInput{
+	_, err = uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucket),
-		Key:    aws.String(presentation_uuid + "/presentation.json"),
-		Body:   io.NopCloser(bytes.NewReader(slides_json)),
+		Key:    aws.String(presentation_content.UUID + "/presentation.json"),
+		Body:   bytes.NewReader(presentation_content_json),
 	})
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message":  err.Error(),
-			"uploader": upload,
-		})
+		return
 	}
 }
 
-func load_presentation_from_S3(existing_presentation_ID string) []slide {
+func load_presentation_from_S3(existing_presentation_ID string, presentation_content *raw_content) {
 	session := initialize_S3()
 	service_client := s3.New(session)
 
@@ -109,7 +104,7 @@ func load_presentation_from_S3(existing_presentation_ID string) []slide {
 	})
 
 	if err != nil {
-		return []slide{}
+		presentation_content.Text_Content = ""
 	}
 
 	result, err := service_client.GetObject(&s3.GetObjectInput{
@@ -118,21 +113,22 @@ func load_presentation_from_S3(existing_presentation_ID string) []slide {
 	})
 
 	if err != nil {
-		return []slide{}
+		presentation_content.Text_Content = ""
 	}
 
 	buffer := new(bytes.Buffer)
 	buffer.ReadFrom(result.Body)
 	buffer_string := buffer.String()
 
-	var slides []slide
-	err = json.Unmarshal([]byte(buffer_string), &slides)
+	var content raw_content
+	err = json.Unmarshal([]byte(buffer_string), &content)
 
 	if err != nil {
-		return []slide{}
+		presentation_content.Text_Content = ""
 	}
 
-	return slides
+	presentation_content.UUID = content.UUID
+	presentation_content.Text_Content = content.Text_Content
 }
 
 func generate_signed_url_from_S3(file_name string) string {
