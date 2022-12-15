@@ -24,7 +24,10 @@ function App() {
         })
     const [user_interface_state, set_user_interface_state] =
         useState<User_Interface_State>({
-            presentation_mode: false,
+            presenter: {
+                presentation_mode: false,
+                current_slide_index: 0
+            },
             should_take_in_existing_presentation_uuid: false,
         })
 
@@ -55,7 +58,6 @@ function App() {
             return
         }
         if (validate(presentation_state.existing_presentation_uuid)) {
-            console.log(presentation_state.existing_presentation_uuid)
             axios
                 .get(
                     `http://localhost:8080/existing_presentation?presentation_uuid=${presentation_state.existing_presentation_uuid}`
@@ -107,7 +109,10 @@ function App() {
     const set_presentation_mode = () => {
         set_user_interface_state({
             ...user_interface_state,
-            presentation_mode: !user_interface_state.presentation_mode,
+            presenter: {
+                ...user_interface_state.presenter,
+                presentation_mode: !user_interface_state.presenter.presentation_mode
+            }
         })
     }
 
@@ -121,7 +126,7 @@ function App() {
 
     return (
         <div className="absolute w-full h-full flex flex-row justify-start">
-            {!user_interface_state.presentation_mode && (
+            {!user_interface_state.presenter.presentation_mode && (
                 <>
                     <Deck
                         presentation_slides={
@@ -150,7 +155,7 @@ function App() {
                     />
                 </>
             )}
-            {user_interface_state.presentation_mode && (
+            {user_interface_state.presenter.presentation_mode && (
                 <>
                     <Presenter
                         presentation_slides={

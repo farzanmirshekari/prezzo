@@ -20,7 +20,12 @@ export interface Presentation_State {
     presentation_slides: Presentation_Slide[]
 }
 
-export interface User_Interface_State {
+export interface Presenter {
     presentation_mode: boolean
+    current_slide_index: number
+}
+
+export interface User_Interface_State {
+    presenter: Presenter
     should_take_in_existing_presentation_uuid: boolean
 }
