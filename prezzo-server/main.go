@@ -54,8 +54,8 @@ func main() {
 }
 
 func get_existing_presentation(c *gin.Context) {
-	// existing_presentation_uuid := c.Query("presentation_uuid")
-	// c.JSON(http.StatusOK, gin.H{"presentation": load_presentation_from_S3(existing_presentation_uuid)})
+	existing_presentation_uuid := c.Query("presentation_uuid")
+	c.JSON(http.StatusOK, gin.H{"presentation": load_presentation_from_S3(existing_presentation_uuid)})
 }
 
 func parse_presentation_content(c *gin.Context) {
@@ -97,7 +97,7 @@ func split_into_slides(presentation_content *raw_content) []slide {
 
 	existing_presentation := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), existing_presentation_regex)
 	if existing_presentation != "" {
-		load_presentation_from_S3(existing_presentation, presentation_content)
+		*presentation_content = load_presentation_from_S3(existing_presentation)
 	}
 
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)

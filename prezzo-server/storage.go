@@ -73,6 +73,10 @@ func upload_image_to_S3(c *gin.Context) {
 }
 
 func save_presentation_to_S3(presentation_content *raw_content) {
+	if presentation_content.UUID == "" {
+		return
+	}
+
 	session := initialize_S3()
 	uploader := s3manager.NewUploader(session)
 	bucket := os.Getenv("AWS_BUCKET_NAME")
@@ -94,7 +98,7 @@ func save_presentation_to_S3(presentation_content *raw_content) {
 	}
 }
 
-func load_presentation_from_S3(existing_presentation_ID string, presentation_content *raw_content) {
+func load_presentation_from_S3(existing_presentation_ID string) raw_content {
 	session := initialize_S3()
 	service_client := s3.New(session)
 
@@ -104,7 +108,7 @@ func load_presentation_from_S3(existing_presentation_ID string, presentation_con
 	})
 
 	if err != nil {
-		presentation_content.Text_Content = ""
+		return raw_content{}
 	}
 
 	result, err := service_client.GetObject(&s3.GetObjectInput{
@@ -113,7 +117,7 @@ func load_presentation_from_S3(existing_presentation_ID string, presentation_con
 	})
 
 	if err != nil {
-		presentation_content.Text_Content = ""
+		return raw_content{}
 	}
 
 	buffer := new(bytes.Buffer)
@@ -124,11 +128,10 @@ func load_presentation_from_S3(existing_presentation_ID string, presentation_con
 	err = json.Unmarshal([]byte(buffer_string), &content)
 
 	if err != nil {
-		presentation_content.Text_Content = ""
+		return raw_content{}
 	}
 
-	presentation_content.UUID = content.UUID
-	presentation_content.Text_Content = content.Text_Content
+	return content
 }
 
 func generate_signed_url_from_S3(file_name string) string {

@@ -7,10 +7,10 @@ interface Props {
     set_presentation_markdown: (
         e: React.ChangeEvent<HTMLTextAreaElement>
     ) => void
-    handle_existing_presentation_load: () => void
+    set_existing_presentation_uuid: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-function Textbox({ presentation_markdown, existing_presentation_uuid, should_take_in_existing_presentation_uuid, set_presentation_markdown, handle_existing_presentation_load }: Props) {
+function Textbox({ presentation_markdown, existing_presentation_uuid, should_take_in_existing_presentation_uuid, set_presentation_markdown, set_existing_presentation_uuid }: Props) {
     return (
         <div className="relative w-full h-full justify-center items-start textbox_container">
             {
@@ -22,6 +22,7 @@ function Textbox({ presentation_markdown, existing_presentation_uuid, should_tak
                         <input
                             type="text"
                             value={existing_presentation_uuid}
+                            onChange={set_existing_presentation_uuid}
                             className="relative w-full h-full pt-2 pb-2 outline-0 bg-transparent"
                         />
                     </div>

@@ -53,6 +53,27 @@ function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [presentation_state.presenatation_markdown])
 
+    useEffect(() => {
+        if (presentation_state.existing_presentation_uuid === '') {
+            return
+        }
+        if (validate(presentation_state.existing_presentation_uuid)) {
+            console.log(presentation_state.existing_presentation_uuid)
+            axios.get(`http://localhost:8080/existing_presentation?presentation_uuid=${presentation_state.existing_presentation_uuid}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log(response.data)
+                        set_presentation_state({
+                            ...presentation_state,
+                            presenatation_markdown: response.data.presentation.text_content,
+                            presentation_uuid: response.data.presentation.presentation_uuid,
+                        })
+                    }
+                })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [presentation_state.existing_presentation_uuid])
+
     const upload_image = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0]
         const form_data = new FormData()
@@ -71,20 +92,19 @@ function App() {
             presentation_mode: !user_interface_state.presentation_mode,
         })
     }
+
+    const set_existing_presentation_uuid = (e: React.ChangeEvent<HTMLInputElement>) => {
+        set_presentation_state({
+            ...presentation_state,
+            existing_presentation_uuid: e.target.value,
+        })
+    }
     
     const toggle_should_take_in_existing_presentation_uuid = () => {
         set_user_interface_state({
             ...user_interface_state,
             should_take_in_existing_presentation_uuid: !user_interface_state.should_take_in_existing_presentation_uuid,
         })
-    }
-
-    const handle_existing_presentation_load = () => {
-        if (presentation_state.existing_presentation_uuid === '') {
-            return
-        }
-        if (validate(presentation_state.existing_presentation_uuid)) {
-        }
     }
 
     return (
@@ -99,8 +119,8 @@ function App() {
                         set_presentation_markdown={set_presentation_markdown}
                         upload_image={upload_image}
                         start_presentation={set_presentation_mode}
+                        set_existing_presentation_uuid={set_existing_presentation_uuid}
                         toggle_should_take_in_existing_presentation_uuid={toggle_should_take_in_existing_presentation_uuid}
-                        handle_existing_presentation_load={handle_existing_presentation_load}
                     />
                 </>
             )}
