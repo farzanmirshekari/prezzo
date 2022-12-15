@@ -57,6 +57,11 @@ textarea {
     background-color: #131113;
 }
 
+.presenter_slide_container {
+    width: 100%;
+    height: min-content;
+}
+
 .slide_deck::-webkit-scrollbar {
     display: none;
 }

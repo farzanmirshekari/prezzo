@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, KeyboardEvent } from 'react'
 import Editor from './components/Editor'
 import './App.css'
 import Deck from './components/Deck'
@@ -85,6 +85,45 @@ function App() {
             })
     }
 
+    const handle_presentation_mode_user_actions = (
+        e: KeyboardEvent<HTMLDivElement>
+    ) => {
+        if (
+            (e.key === 'ArrowRight' || e.key === ' ') &&
+            user_interface_state.presenter.current_slide_index <
+                presentation_state.presentation_slides.length - 1
+        ) {
+            set_user_interface_state({
+                ...user_interface_state,
+                presenter: {
+                    ...user_interface_state.presenter,
+                    current_slide_index:
+                        user_interface_state.presenter.current_slide_index + 1,
+                },
+            })
+        } else if (
+            e.key === 'ArrowLeft' &&
+            user_interface_state.presenter.current_slide_index > 0
+        ) {
+            set_user_interface_state({
+                ...user_interface_state,
+                presenter: {
+                    ...user_interface_state.presenter,
+                    current_slide_index:
+                        user_interface_state.presenter.current_slide_index - 1,
+                },
+            })
+        } else if (e.key === 'Escape') {
+            set_user_interface_state({
+                ...user_interface_state,
+                presenter: {
+                    ...user_interface_state.presenter,
+                    presentation_mode: false,
+                },
+            })
+        }
+    }
+
     const set_presentation_markdown = (
         e: React.ChangeEvent<HTMLTextAreaElement>
     ) => {
@@ -161,6 +200,9 @@ function App() {
                         }
                         current_slide_index={
                             user_interface_state.presenter.current_slide_index
+                        }
+                        handle_presentation_mode_user_actions={
+                            handle_presentation_mode_user_actions
                         }
                     />
                 </>
