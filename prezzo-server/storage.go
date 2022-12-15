@@ -45,7 +45,6 @@ func upload_image_to_S3(c *gin.Context) {
 	bucket := os.Getenv("AWS_BUCKET_NAME")
 
 	file, header, err := c.Request.FormFile("image")
-	presentation_uuid := c.Request.FormValue("presentation_uuid")
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
