@@ -9,9 +9,11 @@ interface Props {
 function Header({ header, classes, presentation_mode }: Props) {
     return (
         <div className={classes ? classes : 'text-center text-6xl'}>
-            <span style={{
-                fontSize: presentation_mode ? '1.5em' : '1em'
-            }}>
+            <span
+                style={{
+                    fontSize: presentation_mode ? '1.5em' : '1em',
+                }}
+            >
                 {header}
             </span>
         </div>
