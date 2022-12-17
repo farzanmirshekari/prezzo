@@ -169,7 +169,6 @@ function App() {
                         presentation_slides={
                             presentation_state.presentation_slides
                         }
-                        presentation_mode={user_interface_state.presenter.presentation_mode}
                     />
                     <Editor
                         presentation_markdown={
