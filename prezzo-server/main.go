@@ -126,7 +126,7 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 		}
 	}
 
-	save_presentation_to_S3(presentation_content, c)
+	// save_presentation_to_S3(presentation_content, c)
 
 	return parsed_slides
 }

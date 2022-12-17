@@ -9,13 +9,14 @@ interface Props {
     body: string
     image: string
     styles: Slide_Styles
+    presentation_mode: boolean
 }
 
-function Slide({ header, body, image, styles }: Props) {
+function Slide({ header, body, image, styles, presentation_mode }: Props) {
     return (
         <div className="relative w-full aspect-video slide">
             <div
-                className="absolute w-full h-full flex flex-row justify-start"
+                className="relative w-full h-full flex flex-row justify-start"
                 style={{
                     backgroundColor: styles.background_color,
                     color: styles.text_color,
@@ -25,7 +26,8 @@ function Slide({ header, body, image, styles }: Props) {
                     <>
                         <Header
                             header={header}
-                            classes="relative w-4/5 h-full left-20 top-20 text-8xl"
+                            classes="relative w-4/5 h-min left-20 top-20 text-8xl"
+                            presentation_mode={presentation_mode}
                         />
                     </>
                 )}
@@ -34,6 +36,7 @@ function Slide({ header, body, image, styles }: Props) {
                         <Header
                             header={header}
                             classes="relative w-5/12 text-7xl top-10 left-16"
+                            presentation_mode={presentation_mode}
                         />
                         <div id="filler" className="relative w-2/12"></div>
                         <Body
@@ -47,6 +50,7 @@ function Slide({ header, body, image, styles }: Props) {
                         <Header
                             header={header}
                             classes="relative w-4/12 text-8xl top-6 left-10"
+                            presentation_mode={presentation_mode}
                         />
                         <div id="filler" className="relative w-3/12"></div>
                         <Image
@@ -84,6 +88,7 @@ function Slide({ header, body, image, styles }: Props) {
                             <Header
                                 header={header}
                                 classes="relative w-full left-8 top-6 text-left text-6xl"
+                                presentation_mode={presentation_mode}
                             />
                             <Body
                                 body={body}

@@ -4,9 +4,10 @@ import Slide from './Slide'
 
 interface Props {
     presentation_slides: Presentation_Slide[]
+    presentation_mode: boolean
 }
 
-function Deck({ presentation_slides }: Props) {
+function Deck({ presentation_slides, presentation_mode }: Props) {
     return (
         <div className="relative w-8/12 h-full overflow-y-scroll slide_deck">
             {presentation_slides.map((slide, index) => {
@@ -17,6 +18,7 @@ function Deck({ presentation_slides }: Props) {
                         body={slide.body}
                         image={slide.image}
                         styles={slide.styles}
+                        presentation_mode={presentation_mode}
                     />
                 )
             })}

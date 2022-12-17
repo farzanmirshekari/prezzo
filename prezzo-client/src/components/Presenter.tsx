@@ -17,28 +17,27 @@ function Presenter({
 }: Props) {
     return (
         <div
-            className="relative w-full overflow-y-hidden aspect-video flex justify-center items-center"
+            className="relative w-screen overflow-y-hidden flex justify-center items-center"
             onKeyDown={handle_presentation_mode_user_actions}
             tabIndex={-1}
         >
-            <div className="relative presenter_slide_container">
-                {
-                    // eslint-disable-next-line array-callback-return
-                    presentation_slides.map((slide, index) => {
-                        if (index === current_slide_index) {
-                            return (
-                                <Slide
-                                    header={slide.header}
-                                    key={index}
-                                    body={slide.body}
-                                    image={slide.image}
-                                    styles={slide.styles}
-                                />
-                            )
-                        }
-                    })
-                }
-            </div>
+            {
+                // eslint-disable-next-line array-callback-return
+                presentation_slides.map((slide, index) => {
+                    if (index === current_slide_index) {
+                        return (
+                            <Slide
+                                header={slide.header}
+                                key={index}
+                                body={slide.body}
+                                image={slide.image}
+                                styles={slide.styles}
+                                presentation_mode={true}
+                            />
+                        )
+                    }
+                })
+            }
         </div>
     )
 }
