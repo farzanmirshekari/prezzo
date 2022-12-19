@@ -15,11 +15,15 @@ interface Props {
 function Slide({ header, body, image, styles, presentation_mode }: Props) {
     console.log(styles.font_face)
     return (
-        <div 
+        <div
             className="relative w-full aspect-video slide overflow-hidden"
             style={{
-                animationName: presentation_mode ? ['slide_up', 'slide_down', 'slide_right', 'slide_left'][~~(Math.random() * 4)] : 'slide_right',
-                animationDuration: '1s'
+                animationName: presentation_mode
+                    ? ['slide_up', 'slide_down', 'slide_right', 'slide_left'][
+                          ~~(Math.random() * 4)
+                      ]
+                    : 'slide_right',
+                animationDuration: '1s',
             }}
         >
             <div
@@ -34,8 +38,8 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                     <div
                         className="relative w-full h-full flex justify-start items-start"
                         style={{
-                            top: presentation_mode ? '2em' : `${4/3}em`,
-                            left: presentation_mode ? '4em' : `${8/3}em`,
+                            top: presentation_mode ? '2em' : `${4 / 3}em`,
+                            left: presentation_mode ? '4em' : `${8 / 3}em`,
                         }}
                     >
                         <Header
@@ -50,7 +54,7 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                         <div
                             className="relative w-5/12 h-auto"
                             style={{
-                                top: presentation_mode ? '2em' : `${4/3}em`,
+                                top: presentation_mode ? '2em' : `${4 / 3}em`,
                                 left: presentation_mode ? '3em' : '2em',
                             }}
                         >
@@ -64,8 +68,8 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                         <div
                             className="relative w-5/12 h-auto"
                             style={{
-                                top: presentation_mode ? '4em' : `${8/3}em`,
-                                left: presentation_mode ? '7em' : `${14/3}em`,
+                                top: presentation_mode ? '4em' : `${8 / 3}em`,
+                                left: presentation_mode ? '7em' : `${14 / 3}em`,
                             }}
                         >
                             <Body
@@ -78,10 +82,10 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                 )}
                 {header && !body && image && (
                     <div className="relative w-full h-full flex justify-start items-start">
-                        <div 
-                            className='relative w-fit h-auto'
+                        <div
+                            className="relative w-fit h-auto"
                             style={{
-                                top: presentation_mode ? '2em' : `${4/3}em`,
+                                top: presentation_mode ? '2em' : `${4 / 3}em`,
                                 left: presentation_mode ? '3em' : '2em',
                             }}
                         >
@@ -103,7 +107,7 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                     <div
                         className="relative w-full h-full flex justify-center items-start leading-10"
                         style={{
-                            top: presentation_mode ? '2em' : `${4/3}em`,
+                            top: presentation_mode ? '2em' : `${4 / 3}em`,
                         }}
                     >
                         <Body
@@ -115,10 +119,10 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                 )}
                 {!header && body && image && (
                     <div className="relative w-full h-full flex justify-start items-start">
-                        <div 
-                            className='relative w-fit h-auto'
+                        <div
+                            className="relative w-fit h-auto"
                             style={{
-                                top: presentation_mode ? '2em' : `${4/3}em`,
+                                top: presentation_mode ? '2em' : `${4 / 3}em`,
                                 left: presentation_mode ? '3em' : '2em',
                             }}
                         >
@@ -138,16 +142,16 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                 )}
                 {header && body && image && (
                     <div className="relative w-full h-full flex justify-start items-start">
-                        <div 
-                            className='relative w-8/12 h-auto flex flex-col gap-6'
+                        <div
+                            className="relative w-8/12 h-auto flex flex-col gap-6"
                             style={{
-                                top: presentation_mode ? '2em' : `${4/3}em`,
+                                top: presentation_mode ? '2em' : `${4 / 3}em`,
                                 left: presentation_mode ? '3em' : '2em',
                             }}
                         >
                             <Header
                                 header={header}
-                                classes="relative w-fit h-auto text-7xl" 
+                                classes="relative w-fit h-auto text-7xl"
                                 presentation_mode={presentation_mode}
                             />
                             <Body
