@@ -32,6 +32,9 @@ function App() {
         })
 
     useEffect(() => {
+        presentation_state.websocket.onopen = () => {
+            console.log('WebSocket Client Connected')
+        }
         presentation_state.websocket.onmessage = (event: IMessageEvent) => {
             set_presentation_state((presentation_state) => ({
                 ...presentation_state,

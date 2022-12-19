@@ -13,6 +13,7 @@ interface Props {
 }
 
 function Slide({ header, body, image, styles, presentation_mode }: Props) {
+    console.log(styles.font_face)
     return (
         <div 
             className="relative w-full aspect-video slide overflow-hidden"
@@ -26,6 +27,7 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                 style={{
                     backgroundColor: styles.background_color,
                     color: styles.text_color,
+                    fontFamily: styles.font_face,
                 }}
             >
                 {header && !body && !image && (
@@ -38,7 +40,7 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                     >
                         <Header
                             header={header}
-                            classes="relative w-4/5 h-min text-8xl"
+                            classes="relative w-11/12 h-min text-8xl"
                             presentation_mode={presentation_mode}
                         />
                     </div>

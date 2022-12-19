@@ -3,6 +3,7 @@ import { w3cwebsocket } from 'websocket'
 export interface Slide_Styles {
     background_color: string
     text_color: string
+    font_face: string
 }
 
 export interface Presentation_Slide {

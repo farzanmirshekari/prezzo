@@ -18,6 +18,7 @@ type raw_content struct {
 type styles struct {
 	BackgroundColor string `json:"background_color"`
 	TextColor       string `json:"text_color"`
+	FontFace        string `json:"font_face"`
 }
 
 type slide struct {
@@ -91,6 +92,7 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 	body_delimiter := "~"
 	background_color_scheme_regex := regexp.MustCompile(`color-scheme:\s*(.*?)\s*;`)
 	text_color_regex := regexp.MustCompile(`text-color:\s*(.*?)\s*;`)
+	font_face_regex := regexp.MustCompile(`font-face:\s*(.*?)\s*;`)
 	image_name_regex := regexp.MustCompile(`/assets/\s*(.*?)\s*;`)
 
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
@@ -104,24 +106,27 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 	parsed_slides := make([]slide, len(slides))
 	slides_headers := make([]string, len(slides))
 	slides_body := make([]string, len(slides))
-	slide_text_colors := make([]string, len(slides))
-	slide_images := make([]string, len(slides))
+	slides_text_colors := make([]string, len(slides))
+	slide_font_faces := make([]string, len(slides))
+	slides_images := make([]string, len(slides))
 
 	for i := range slides {
-		slide_text_colors[i] = filter_string_by_regex(purge_string(slides[i], " "), text_color_regex)
-		slides[i] = purge_string(slides[i], slide_text_colors[i])
+		slides_text_colors[i] = filter_string_by_regex(purge_string(slides[i], " "), text_color_regex)
+		slide_font_faces[i] = filter_string_by_regex(purge_string(slides[i], " "), font_face_regex)
+		slides[i] = purge_string(slides[i], slides_text_colors[i])
 		slides_headers[i] = validate_split_string(filter_string_by_delimiter(slides[i], header_delimiter))
 		slides_body[i] = validate_split_string(filter_string_by_delimiter(slides[i], body_delimiter))
-		slide_images[i] = generate_signed_url_from_S3(filter_string_by_regex(slides[i], image_name_regex), c)
+		slides_images[i] = generate_signed_url_from_S3(filter_string_by_regex(slides[i], image_name_regex), c)
 
 		parsed_slides[i] = slide{
 			Index:  i,
 			Header: slides_headers[i],
 			Body:   slides_body[i],
-			Image:  slide_images[i],
+			Image:  slides_images[i],
 			Styles: styles{
 				BackgroundColor: gamut.ToHex(slide_background_colors[i]),
-				TextColor:       slide_text_colors[i],
+				TextColor:       slides_text_colors[i],
+				FontFace:        slide_font_faces[i],
 			},
 		}
 	}
