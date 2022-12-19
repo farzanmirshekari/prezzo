@@ -13,7 +13,6 @@ interface Props {
 }
 
 function Slide({ header, body, image, styles, presentation_mode }: Props) {
-    console.log(styles.font_face)
     return (
         <div
             className="relative w-full aspect-video slide overflow-hidden"
