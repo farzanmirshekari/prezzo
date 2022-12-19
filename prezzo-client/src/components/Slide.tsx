@@ -93,14 +93,14 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                 )}
                 {!header && body && !image && (
                     <div
-                        className="relative w-full h-full flex justify-center items-start"
+                        className="relative w-full h-full flex justify-center items-start leading-10"
                         style={{
                             top: presentation_mode ? '2em' : `${4/3}em`,
                         }}
                     >
                         <Body
                             body={body}
-                            classes="relative w-auto w-10/12 text-5xl leading-15"
+                            classes="relative w-auto w-10/12 text-5xl"
                             presentation_mode={presentation_mode}
                         />
                     </div>
@@ -116,7 +116,7 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                         >
                             <Body
                                 body={body}
-                                classes="relative w-fit h-auto text-4xl leading-15"
+                                classes="relative w-fit h-auto text-5xl"
                                 presentation_mode={presentation_mode}
                             />
                         </div>
@@ -129,27 +129,34 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                     </div>
                 )}
                 {header && body && image && (
-                    <>
-                        <div className="relative w-2/5 h-full flex flex-col justify-start gap-16">
+                    <div className="relative w-full h-full flex justify-start items-start">
+                        <div 
+                            className='relative w-8/12 h-auto flex flex-col gap-6'
+                            style={{
+                                top: presentation_mode ? '2em' : `${4/3}em`,
+                                left: presentation_mode ? '3em' : '2em',
+                            }}
+                        >
                             <Header
                                 header={header}
-                                classes="relative w-full left-8 top-6 text-left text-6xl"
+                                classes="relative w-fit h-auto text-7xl" 
                                 presentation_mode={presentation_mode}
                             />
                             <Body
                                 body={body}
-                                classes="relative w-full left-8 text-left text-2xl"
+                                classes="relative w-full h-auto text-4xl"
                                 presentation_mode={presentation_mode}
                             />
                         </div>
-                        <div className="relative w-1/2 h-full flex justify-end items-center">
+                        <div id="filler" className="relative w-1/12"></div>
+                        <div className="relative w-7/12 h-full flex justify-end items-center">
                             <Image
                                 image_source={image}
                                 image_alt="Image Alt.."
                                 classes="relative h-full object-cover"
                             />
                         </div>
-                    </>
+                    </div>
                 )}
                 {!header && !body && image && (
                     <>
