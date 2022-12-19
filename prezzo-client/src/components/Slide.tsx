@@ -14,7 +14,13 @@ interface Props {
 
 function Slide({ header, body, image, styles, presentation_mode }: Props) {
     return (
-        <div className="relative w-full aspect-video slide overflow-hidden">
+        <div 
+            className="relative w-full aspect-video slide overflow-hidden"
+            style={{
+                animationName: presentation_mode ? ['slide_up', 'slide_down', 'slide_right', 'slide_left'][~~(Math.random() * 4)] : 'slide_right',
+                animationDuration: '1s'
+            }}
+        >
             <div
                 className="relative w-full h-full flex flex-row justify-start"
                 style={{
