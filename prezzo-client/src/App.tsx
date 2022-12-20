@@ -149,6 +149,7 @@ function App() {
                 ...user_interface_state.presenter,
                 presentation_mode:
                     !user_interface_state.presenter.presentation_mode,
+                    current_slide_index: 0,
             },
         })
     }

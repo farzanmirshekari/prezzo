@@ -17,7 +17,7 @@ function Presenter({
 }: Props) {
     return (
         <div
-            className="relative w-screen overflow-y-hidden flex justify-center items-center presenter"
+            className="relative w-screen overflow-hidden flex justify-center items-center presenter"
             onKeyDown={handle_presentation_mode_user_actions}
             tabIndex={-1}
         >

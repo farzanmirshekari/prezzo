@@ -96,12 +96,17 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 	image_name_regex := regexp.MustCompile(`/assets/\s*(.*?)\s*;`)
 
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
-	color_scheme := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), background_color_scheme_regex)
 
+	color_scheme := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), background_color_scheme_regex)
 	if color_scheme == "" {
 		color_scheme = "#427ef5"
 	}
 	slide_background_colors := gamut.Tints(gamut.Hex(color_scheme), len(slides)*2)
+
+	font_face := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), font_face_regex)
+	if font_face == "" {
+		font_face = "Roboto"
+	}
 
 	parsed_slides := make([]slide, len(slides))
 	slides_headers := make([]string, len(slides))
@@ -112,7 +117,7 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 
 	for i := range slides {
 		slides_text_colors[i] = filter_string_by_regex(purge_string(slides[i], " "), text_color_regex)
-		slide_font_faces[i] = filter_string_by_regex(purge_string(slides[i], " "), font_face_regex)
+		slide_font_faces[i] = font_face
 		slides[i] = purge_string(slides[i], slides_text_colors[i])
 		slides_headers[i] = validate_split_string(filter_string_by_delimiter(slides[i], header_delimiter))
 		slides_body[i] = validate_split_string(filter_string_by_delimiter(slides[i], body_delimiter))
