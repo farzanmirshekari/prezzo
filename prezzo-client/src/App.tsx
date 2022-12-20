@@ -1,4 +1,4 @@
-import React, { useEffect, useState, KeyboardEvent } from 'react'
+import React, { useEffect, useState, KeyboardEvent, useRef } from 'react'
 import Editor from './components/Editor'
 import './App.css'
 import Deck from './components/Deck'
@@ -14,9 +14,6 @@ import { IMessageEvent, w3cwebsocket as W3CWebSocket } from 'websocket'
 function App() {
     const [presentation_state, set_presentation_state] =
         useState<Presentation_State>({
-            websocket: new W3CWebSocket(
-                'ws://127.0.0.1:8080/presentation_content'
-            ),
             presentation_uuid: uuidv4(),
             existing_presentation_uuid: '',
             presenatation_markdown: '',
@@ -30,9 +27,13 @@ function App() {
             },
             should_take_in_existing_presentation_uuid: false,
         })
+    const websocket = useRef<W3CWebSocket>()
 
     useEffect(() => {
-        presentation_state.websocket.onmessage = (event: IMessageEvent) => {
+        websocket.current = new W3CWebSocket(
+            'ws://localhost:8080/presentation_content'
+        )
+        websocket.current.onmessage = (event: IMessageEvent) => {
             set_presentation_state((presentation_state) => ({
                 ...presentation_state,
                 presentation_slides: JSON.parse(event.data.toString()),
@@ -42,8 +43,8 @@ function App() {
     }, [])
 
     useEffect(() => {
-        if (presentation_state.websocket.readyState === 1) {
-            presentation_state.websocket.send(
+        if (websocket.current!.readyState === 1) {
+            websocket.current!.send(
                 JSON.stringify({
                     presentation_uuid: presentation_state.presentation_uuid,
                     text_content: presentation_state.presenatation_markdown,
@@ -149,7 +150,7 @@ function App() {
                 ...user_interface_state.presenter,
                 presentation_mode:
                     !user_interface_state.presenter.presentation_mode,
-                    current_slide_index: 0,
+                current_slide_index: 0,
             },
         })
     }

@@ -1,5 +1,3 @@
-import { w3cwebsocket } from 'websocket'
-
 export interface Slide_Styles {
     background_color: string
     text_color: string
@@ -14,7 +12,6 @@ export interface Presentation_Slide {
 }
 
 export interface Presentation_State {
-    websocket: w3cwebsocket
     presentation_uuid: string
     existing_presentation_uuid: string
     presenatation_markdown: string

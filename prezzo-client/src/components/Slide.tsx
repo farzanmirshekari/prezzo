@@ -18,9 +18,14 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
             className="relative w-full aspect-video slide overflow-hidden"
             style={{
                 animationName: presentation_mode
-                    ? ['slide_up', 'slide_down', 'slide_right', 'slide_left', 'slide_diagonally_from_top_left', 'slide_diagonally_from_bottom_right'][
-                          ~~(Math.random() * 6)
-                      ]
+                    ? [
+                          'slide_up',
+                          'slide_down',
+                          'slide_right',
+                          'slide_left',
+                          'slide_diagonally_from_top_left',
+                          'slide_diagonally_from_bottom_right',
+                      ][~~(Math.random() * 6)]
                     : 'slide_right',
                 animationDuration: '0.5s',
             }}
