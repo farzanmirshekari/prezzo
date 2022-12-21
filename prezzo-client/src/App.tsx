@@ -61,7 +61,11 @@ function App() {
                     `http://localhost:8080/existing_presentation?presentation_uuid=${presentation_state.existing_presentation_uuid}`
                 )
                 .then((response) => {
-                    if (response.status === 200) {
+                    if (
+                        response.status === 200 &&
+                        response.data.presentation.text_content &&
+                        response.data.presentation.presentation_uuid
+                    ) {
                         set_presentation_state({
                             ...presentation_state,
                             presenatation_markdown:
@@ -161,6 +165,10 @@ function App() {
             should_take_in_existing_presentation_uuid:
                 !user_interface_state.should_take_in_existing_presentation_uuid,
         })
+        set_presentation_state({
+            ...presentation_state,
+            existing_presentation_uuid: '',
+        })
     }
 
     return (
@@ -173,6 +181,7 @@ function App() {
                         }
                     />
                     <Editor
+                        presentation_uuid={presentation_state.presentation_uuid}
                         presentation_markdown={
                             presentation_state.presenatation_markdown
                         }

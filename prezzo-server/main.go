@@ -105,7 +105,7 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 
 	font_face := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), font_face_regex)
 	if font_face == "" {
-		font_face = "Roboto"
+		font_face = "Arial"
 	}
 
 	parsed_slides := make([]slide, len(slides))

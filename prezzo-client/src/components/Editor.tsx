@@ -3,6 +3,7 @@ import Pane from './micro-components/Pane'
 import Textbox from './micro-components/Textbox'
 
 interface Props {
+    presentation_uuid: string
     presentation_markdown: string
     existing_presentation_uuid: string
     should_take_in_existing_presentation_uuid: boolean
@@ -18,6 +19,7 @@ interface Props {
 }
 
 function Editor({
+    presentation_uuid,
     presentation_markdown,
     existing_presentation_uuid,
     should_take_in_existing_presentation_uuid,
@@ -37,6 +39,7 @@ function Editor({
                 }
             />
             <Textbox
+                presentation_uuid={presentation_uuid}
                 presentation_markdown={presentation_markdown}
                 existing_presentation_uuid={existing_presentation_uuid}
                 should_take_in_existing_presentation_uuid={
