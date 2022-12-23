@@ -12,7 +12,7 @@ interface Props {
     ) => void
     upload_image: (e: React.ChangeEvent<HTMLInputElement>) => void
     start_presentation: () => void
-    set_existing_presentation_uuid: (
+    handle_existing_presentation_uuid: (
         e: React.ChangeEvent<HTMLInputElement>
     ) => void
     toggle_should_take_in_existing_presentation_uuid: () => void
@@ -26,7 +26,7 @@ function Editor({
     set_presentation_markdown,
     upload_image,
     start_presentation,
-    set_existing_presentation_uuid,
+    handle_existing_presentation_uuid,
     toggle_should_take_in_existing_presentation_uuid,
 }: Props) {
     return (
@@ -46,7 +46,9 @@ function Editor({
                     should_take_in_existing_presentation_uuid
                 }
                 set_presentation_markdown={set_presentation_markdown}
-                set_existing_presentation_uuid={set_existing_presentation_uuid}
+                handle_existing_presentation_uuid={
+                    handle_existing_presentation_uuid
+                }
             />
         </div>
     )
