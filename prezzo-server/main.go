@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	"image/color"
 	"net/http"
 	"regexp"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -82,57 +80,6 @@ func parse_presentation_content(c *gin.Context) {
 	}
 }
 
-func get_background_colors(presentation_content raw_content, slides_count int) []color.Color {
-	background_color_scheme_regex := regexp.MustCompile(`color-scheme:\s*(.*?)\s*;`)
-	color_scheme := filter_string_by_regex(presentation_content.Text_Content, background_color_scheme_regex)
-	if color_scheme == "" {
-		color_scheme = "#427ef5 tint"
-	}
-	color_scheme_split := strings.Split(color_scheme, " ")
-	if len(color_scheme_split) < 2 {
-		color_scheme_split = append(color_scheme_split, "")
-	}
-	color_scheme_color := color_scheme_split[0]
-	color_scheme_progression := color_scheme_split[1]
-	if color_scheme_progression == "tint" {
-		return gamut.Tints(gamut.Hex(color_scheme_color), slides_count*2)
-	} else if color_scheme_progression == "shade" {
-		return gamut.Shades(gamut.Hex(color_scheme_color), slides_count*2)
-	} else if color_scheme_progression == "tone" {
-		return gamut.Tones(gamut.Hex(color_scheme_color), slides_count*2)
-	} else {
-		return func() []color.Color {
-			colors := make([]color.Color, slides_count*2)
-			for i := range colors {
-				colors[i] = gamut.Hex(color_scheme_color)
-			}
-			return colors
-		}()
-	}
-}
-
-func get_slide_text_color(slide *string, default_color string) string {
-	text_color_regex := regexp.MustCompile(`text-color:\s*(.*?)\s*;`)
-	text_color := filter_string_by_regex(purge_string(*slide, " "), text_color_regex)
-	if text_color == "" {
-		return default_color
-	} else {
-		*slide = purge_string(*slide, fmt.Sprintf("text-color: %s;", text_color))
-		return text_color
-	}
-}
-
-func get_slide_background_color(slide *string, default_color color.Color) color.Color {
-	slide_background_color_regex := regexp.MustCompile(`background-color:\s*(.*?)\s*;`)
-	slide_background_color := filter_string_by_regex(purge_string(*slide, " "), slide_background_color_regex)
-	if slide_background_color == "" {
-		return default_color
-	} else {
-		*slide = purge_string(*slide, fmt.Sprintf("background-color: %s;", slide_background_color))
-		return gamut.Hex(slide_background_color)
-	}
-}
-
 func split_into_slides(presentation_content *raw_content, c *gin.Context) []slide {
 
 	if presentation_uuid != presentation_content.UUID {
@@ -143,29 +90,24 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 	slide_delimiter := "---"
 	header_delimiter := "#"
 	body_delimiter := "~"
-	font_face_regex := regexp.MustCompile(`font-face:\s*(.*?)\s*;`)
 	image_name_regex := regexp.MustCompile(`/assets/\s*(.*?)\s*;`)
 
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
 
+	slide_text_colors := get_text_colors(*presentation_content, len(slides))
 	slide_background_colors := get_background_colors(*presentation_content, len(slides))
-
-	font_face := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), font_face_regex)
-	if font_face == "" {
-		font_face = "Arial"
-	}
+	slide_font_faces := get_font_faces(*presentation_content, len(slides))
 
 	parsed_slides := make([]slide, len(slides))
 	slides_headers := make([]string, len(slides))
 	slides_body := make([]string, len(slides))
-	slides_text_colors := make([]string, len(slides))
-	slide_font_faces := make([]string, len(slides))
 	slides_images := make([]string, len(slides))
 
 	for i := range slides {
-		slides_text_colors[i] = get_slide_text_color(&slides[i], "#000000")
-		slide_font_faces[i] = font_face
+		slide_text_colors[i] = get_slide_text_color(&slides[i], slide_text_colors[i])
+		slide_font_faces[i] = get_slide_font_face(&slides[i], slide_font_faces[i])
 		slide_background_colors[i] = get_slide_background_color(&slides[i], slide_background_colors[i])
+
 		slides_headers[i] = validate_split_string(filter_string_by_delimiter(slides[i], header_delimiter))
 		slides_body[i] = validate_split_string(filter_string_by_delimiter(slides[i], body_delimiter))
 		slides_images[i] = generate_signed_url_from_S3(filter_string_by_regex(slides[i], image_name_regex), c)
@@ -177,7 +119,7 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 			Image:  slides_images[i],
 			Styles: styles{
 				BackgroundColor: gamut.ToHex(slide_background_colors[i]),
-				TextColor:       slides_text_colors[i],
+				TextColor:       slide_text_colors[i],
 				FontFace:        slide_font_faces[i],
 			},
 		}
