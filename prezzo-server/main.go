@@ -111,6 +111,28 @@ func get_background_colors(presentation_content raw_content, slides_count int) [
 	}
 }
 
+func get_slide_text_color(slide *string, default_color string) string {
+	text_color_regex := regexp.MustCompile(`text-color:\s*(.*?)\s*;`)
+	text_color := filter_string_by_regex(purge_string(*slide, " "), text_color_regex)
+	if text_color == "" {
+		return default_color
+	} else {
+		*slide = purge_string(*slide, fmt.Sprintf("text-color: %s;", text_color))
+		return text_color
+	}
+}
+
+func get_slide_background_color(slide *string, default_color color.Color) color.Color {
+	slide_background_color_regex := regexp.MustCompile(`background-color:\s*(.*?)\s*;`)
+	slide_background_color := filter_string_by_regex(purge_string(*slide, " "), slide_background_color_regex)
+	if slide_background_color == "" {
+		return default_color
+	} else {
+		*slide = purge_string(*slide, fmt.Sprintf("background-color: %s;", slide_background_color))
+		return gamut.Hex(slide_background_color)
+	}
+}
+
 func split_into_slides(presentation_content *raw_content, c *gin.Context) []slide {
 
 	if presentation_uuid != presentation_content.UUID {
@@ -121,7 +143,6 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 	slide_delimiter := "---"
 	header_delimiter := "#"
 	body_delimiter := "~"
-	text_color_regex := regexp.MustCompile(`text-color:\s*(.*?)\s*;`)
 	font_face_regex := regexp.MustCompile(`font-face:\s*(.*?)\s*;`)
 	image_name_regex := regexp.MustCompile(`/assets/\s*(.*?)\s*;`)
 
@@ -142,9 +163,9 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 	slides_images := make([]string, len(slides))
 
 	for i := range slides {
-		slides_text_colors[i] = filter_string_by_regex(purge_string(slides[i], " "), text_color_regex)
+		slides_text_colors[i] = get_slide_text_color(&slides[i], "#000000")
 		slide_font_faces[i] = font_face
-		slides[i] = purge_string(slides[i], slides_text_colors[i])
+		slide_background_colors[i] = get_slide_background_color(&slides[i], slide_background_colors[i])
 		slides_headers[i] = validate_split_string(filter_string_by_delimiter(slides[i], header_delimiter))
 		slides_body[i] = validate_split_string(filter_string_by_delimiter(slides[i], body_delimiter))
 		slides_images[i] = generate_signed_url_from_S3(filter_string_by_regex(slides[i], image_name_regex), c)
