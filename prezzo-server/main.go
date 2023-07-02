@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"image/color"
 	"net/http"
 	"regexp"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -80,6 +82,35 @@ func parse_presentation_content(c *gin.Context) {
 	}
 }
 
+func get_background_colors(presentation_content raw_content, slides_count int) []color.Color {
+	background_color_scheme_regex := regexp.MustCompile(`color-scheme:\s*(.*?)\s*;`)
+	color_scheme := filter_string_by_regex(presentation_content.Text_Content, background_color_scheme_regex)
+	if color_scheme == "" {
+		color_scheme = "#427ef5 tint"
+	}
+	color_scheme_split := strings.Split(color_scheme, " ")
+	if len(color_scheme_split) < 2 {
+		color_scheme_split = append(color_scheme_split, "")
+	}
+	color_scheme_color := color_scheme_split[0]
+	color_scheme_progression := color_scheme_split[1]
+	if color_scheme_progression == "tint" {
+		return gamut.Tints(gamut.Hex(color_scheme_color), slides_count*2)
+	} else if color_scheme_progression == "shade" {
+		return gamut.Shades(gamut.Hex(color_scheme_color), slides_count*2)
+	} else if color_scheme_progression == "tone" {
+		return gamut.Tones(gamut.Hex(color_scheme_color), slides_count*2)
+	} else {
+		return func() []color.Color {
+			colors := make([]color.Color, slides_count*2)
+			for i := range colors {
+				colors[i] = gamut.Hex(color_scheme_color)
+			}
+			return colors
+		}()
+	}
+}
+
 func split_into_slides(presentation_content *raw_content, c *gin.Context) []slide {
 
 	if presentation_uuid != presentation_content.UUID {
@@ -90,18 +121,13 @@ func split_into_slides(presentation_content *raw_content, c *gin.Context) []slid
 	slide_delimiter := "---"
 	header_delimiter := "#"
 	body_delimiter := "~"
-	background_color_scheme_regex := regexp.MustCompile(`color-scheme:\s*(.*?)\s*;`)
 	text_color_regex := regexp.MustCompile(`text-color:\s*(.*?)\s*;`)
 	font_face_regex := regexp.MustCompile(`font-face:\s*(.*?)\s*;`)
 	image_name_regex := regexp.MustCompile(`/assets/\s*(.*?)\s*;`)
 
 	slides := filter_string_by_delimiter(presentation_content.Text_Content, slide_delimiter)
 
-	color_scheme := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), background_color_scheme_regex)
-	if color_scheme == "" {
-		color_scheme = "#427ef5"
-	}
-	slide_background_colors := gamut.Tints(gamut.Hex(color_scheme), len(slides)*2)
+	slide_background_colors := get_background_colors(*presentation_content, len(slides))
 
 	font_face := filter_string_by_regex(purge_string(presentation_content.Text_Content, " "), font_face_regex)
 	if font_face == "" {
