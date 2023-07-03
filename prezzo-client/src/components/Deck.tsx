@@ -8,7 +8,7 @@ interface Props {
 
 function Deck({ presentation_slides }: Props) {
     return (
-        <div className="relative w-8/12 h-full overflow-y-scroll slide_deck">
+        <div className="relative w-7/12 h-full overflow-y-scroll slide_deck">
             {presentation_slides.map((slide, index) => {
                 return (
                     <Slide

@@ -28,7 +28,7 @@ function Editor({
     toggle_should_take_in_existing_presentation_uuid,
 }: Props) {
     return (
-        <div className="relative w-4/12 h-full overflow-y-hidden">
+        <div className="relative w-5/12 h-full overflow-y-hidden">
             <Pane
                 upload_image={upload_image}
                 toggle_should_take_in_existing_presentation_uuid={

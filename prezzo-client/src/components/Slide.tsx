@@ -15,7 +15,7 @@ function Slide({ header, body, image, styles }: Props) {
         <div
             className="relative w-full aspect-video slide overflow-hidden"
             style={{
-                aspectRatio: window.innerWidth / window.innerHeight,
+                aspectRatio: 297 / 210,
             }}
         >
             <div
