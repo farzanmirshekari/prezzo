@@ -1,4 +1,3 @@
-import React from 'react'
 import { Slide_Styles } from '../interfaces/interface-models'
 import Body from './micro-components/Body'
 import Header from './micro-components/Header'
@@ -9,25 +8,14 @@ interface Props {
     body: string
     image: string
     styles: Slide_Styles
-    presentation_mode: boolean
 }
 
-function Slide({ header, body, image, styles, presentation_mode }: Props) {
+function Slide({ header, body, image, styles }: Props) {
     return (
         <div
             className="relative w-full aspect-video slide overflow-hidden"
             style={{
-                animationName: presentation_mode
-                    ? [
-                          'slide_up',
-                          'slide_down',
-                          'slide_right',
-                          'slide_left',
-                          'slide_diagonally_from_top_left',
-                          'slide_diagonally_from_bottom_right',
-                      ][~~(Math.random() * 6)]
-                    : 'slide_right',
-                animationDuration: '0.5s',
+                aspectRatio: window.innerWidth / window.innerHeight,
             }}
         >
             <div
@@ -42,13 +30,12 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                     <div
                         className="relative w-full h-min flex justify-center items-start"
                         style={{
-                            top: presentation_mode ? '2em' : `${4 / 3}em`,
+                            top: '6%',
                         }}
                     >
                         <Header
                             header={header}
                             classes="relative w-11/12 h-auto text-8xl"
-                            presentation_mode={presentation_mode}
                         />
                     </div>
                 )}
@@ -57,27 +44,23 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                         <div
                             className="relative flex w-full h-auto justify-center"
                             style={{
-                                top: presentation_mode ? '2em' : `${4 / 3}em`,
+                                top: '6%',
                             }}
                         >
                             <Header
                                 header={header}
                                 classes="relative w-11/12 h-auto text-8xl"
-                                presentation_mode={presentation_mode}
                             />
                         </div>
                         <div
                             className="relative flex w-full h-auto justify-center"
                             style={{
-                                bottom: presentation_mode
-                                    ? '4em'
-                                    : `${8 / 3}em`,
+                                bottom: '9%',
                             }}
                         >
                             <Body
                                 body={body}
                                 classes="relative w-11/12 h-auto text-4xl"
-                                presentation_mode={presentation_mode}
                             />
                         </div>
                     </div>
@@ -87,13 +70,12 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                         <div
                             className="relative flex w-1/2 h-auto justify-center items-center"
                             style={{
-                                top: presentation_mode ? '2em' : `${4 / 3}em`,
+                                top: '6%',
                             }}
                         >
                             <Header
                                 header={header}
-                                classes="relative w-11/12 h-auto text-7xl"
-                                presentation_mode={presentation_mode}
+                                classes="relative w-11/12 ml-5 h-auto text-7xl"
                             />
                         </div>
                         <Image
@@ -107,14 +89,10 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                     <div
                         className="relative w-full h-full flex justify-center leading-10"
                         style={{
-                            top: presentation_mode ? '2em' : `${4 / 3}em`,
+                            top: '10%',
                         }}
                     >
-                        <Body
-                            body={body}
-                            classes="relative w-11/12 text-5xl"
-                            presentation_mode={presentation_mode}
-                        />
+                        <Body body={body} classes="relative w-11/12 text-5xl" />
                     </div>
                 )}
                 {!header && body && image && (
@@ -122,13 +100,12 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                         <div
                             className="relative flex w-1/2 h-auto justify-center"
                             style={{
-                                top: presentation_mode ? '2em' : `${4 / 3}em`,
+                                top: '7%',
                             }}
                         >
                             <Body
                                 body={body}
                                 classes="relative w-10/12 h-auto text-5xl"
-                                presentation_mode={presentation_mode}
                             />
                         </div>
                         <Image
@@ -143,18 +120,16 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                         <div
                             className="relative w-7/12 h-auto flex flex-col gap-10 items-center"
                             style={{
-                                top: presentation_mode ? '2em' : `${4 / 3}em`,
+                                top: '6%',
                             }}
                         >
                             <Header
                                 header={header}
                                 classes="relative w-11/12 h-auto text-7xl"
-                                presentation_mode={presentation_mode}
                             />
                             <Body
                                 body={body}
                                 classes="relative w-11/12 h-auto text-3xl"
-                                presentation_mode={presentation_mode}
                             />
                         </div>
                         <div className="relative w-5/12 h-full flex justify-end items-center">
@@ -167,13 +142,11 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                     </div>
                 )}
                 {!header && !body && image && (
-                    <>
-                        <Image
-                            image_source={image}
-                            image_alt="Image Alt.."
-                            classes="relative w-full object-cover"
-                        />
-                    </>
+                    <Image
+                        image_source={image}
+                        image_alt="Image Alt.."
+                        classes="relative w-full object-cover"
+                    />
                 )}
             </div>
         </div>

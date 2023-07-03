@@ -11,7 +11,6 @@ interface Props {
         e: React.ChangeEvent<HTMLTextAreaElement>
     ) => void
     upload_image: (e: React.ChangeEvent<HTMLInputElement>) => void
-    start_presentation: () => void
     handle_existing_presentation_uuid: (
         e: React.ChangeEvent<HTMLInputElement>
     ) => void
@@ -25,7 +24,6 @@ function Editor({
     should_take_in_existing_presentation_uuid,
     set_presentation_markdown,
     upload_image,
-    start_presentation,
     handle_existing_presentation_uuid,
     toggle_should_take_in_existing_presentation_uuid,
 }: Props) {
@@ -33,7 +31,6 @@ function Editor({
         <div className="relative w-4/12 h-full overflow-y-hidden">
             <Pane
                 upload_image={upload_image}
-                start_presentation={start_presentation}
                 toggle_should_take_in_existing_presentation_uuid={
                     toggle_should_take_in_existing_presentation_uuid
                 }

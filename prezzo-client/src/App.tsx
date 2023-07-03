@@ -8,7 +8,6 @@ import {
 } from './interfaces/interface-models'
 import axios from 'axios'
 import { v4 as uuidv4, validate } from 'uuid'
-import Presenter from './components/Presenter'
 import { IMessageEvent, w3cwebsocket as W3CWebSocket } from 'websocket'
 
 function App() {
@@ -21,10 +20,6 @@ function App() {
         })
     const [user_interface_state, set_user_interface_state] =
         useState<User_Interface_State>({
-            presenter: {
-                presentation_mode: false,
-                current_slide_index: 0,
-            },
             should_take_in_existing_presentation_uuid: false,
         })
     const websocket = useRef<W3CWebSocket>()
@@ -69,45 +64,6 @@ function App() {
             })
     }
 
-    const handle_presentation_mode_user_actions = (
-        e: KeyboardEvent<HTMLDivElement>
-    ) => {
-        if (
-            (e.key === 'ArrowRight' || e.key === ' ') &&
-            user_interface_state.presenter.current_slide_index <
-                presentation_state.presentation_slides.length - 1
-        ) {
-            set_user_interface_state({
-                ...user_interface_state,
-                presenter: {
-                    ...user_interface_state.presenter,
-                    current_slide_index:
-                        user_interface_state.presenter.current_slide_index + 1,
-                },
-            })
-        } else if (
-            e.key === 'ArrowLeft' &&
-            user_interface_state.presenter.current_slide_index > 0
-        ) {
-            set_user_interface_state({
-                ...user_interface_state,
-                presenter: {
-                    ...user_interface_state.presenter,
-                    current_slide_index:
-                        user_interface_state.presenter.current_slide_index - 1,
-                },
-            })
-        } else if (e.key === 'Escape') {
-            set_user_interface_state({
-                ...user_interface_state,
-                presenter: {
-                    ...user_interface_state.presenter,
-                    presentation_mode: false,
-                },
-            })
-        }
-    }
-
     const handle_existing_presentation_uuid = (
         e: React.ChangeEvent<HTMLInputElement>
     ) => {
@@ -143,18 +99,6 @@ function App() {
         })
     }
 
-    const set_presentation_mode = () => {
-        set_user_interface_state({
-            ...user_interface_state,
-            presenter: {
-                ...user_interface_state.presenter,
-                presentation_mode:
-                    !user_interface_state.presenter.presentation_mode,
-                current_slide_index: 0,
-            },
-        })
-    }
-
     const toggle_should_take_in_existing_presentation_uuid = () => {
         set_user_interface_state({
             ...user_interface_state,
@@ -169,51 +113,29 @@ function App() {
 
     return (
         <div className="absolute w-full h-full flex flex-row justify-start">
-            {!user_interface_state.presenter.presentation_mode && (
-                <>
-                    <Deck
-                        presentation_slides={
-                            presentation_state.presentation_slides
-                        }
-                    />
-                    <Editor
-                        presentation_uuid={presentation_state.presentation_uuid}
-                        presentation_markdown={
-                            presentation_state.presenatation_markdown
-                        }
-                        existing_presentation_uuid={
-                            presentation_state.existing_presentation_uuid
-                        }
-                        should_take_in_existing_presentation_uuid={
-                            user_interface_state.should_take_in_existing_presentation_uuid
-                        }
-                        set_presentation_markdown={set_presentation_markdown}
-                        upload_image={upload_image}
-                        start_presentation={set_presentation_mode}
-                        handle_existing_presentation_uuid={
-                            handle_existing_presentation_uuid
-                        }
-                        toggle_should_take_in_existing_presentation_uuid={
-                            toggle_should_take_in_existing_presentation_uuid
-                        }
-                    />
-                </>
-            )}
-            {user_interface_state.presenter.presentation_mode && (
-                <>
-                    <Presenter
-                        presentation_slides={
-                            presentation_state.presentation_slides
-                        }
-                        current_slide_index={
-                            user_interface_state.presenter.current_slide_index
-                        }
-                        handle_presentation_mode_user_actions={
-                            handle_presentation_mode_user_actions
-                        }
-                    />
-                </>
-            )}
+            <Deck
+                presentation_slides={presentation_state.presentation_slides}
+            />
+            <Editor
+                presentation_uuid={presentation_state.presentation_uuid}
+                presentation_markdown={
+                    presentation_state.presenatation_markdown
+                }
+                existing_presentation_uuid={
+                    presentation_state.existing_presentation_uuid
+                }
+                should_take_in_existing_presentation_uuid={
+                    user_interface_state.should_take_in_existing_presentation_uuid
+                }
+                set_presentation_markdown={set_presentation_markdown}
+                upload_image={upload_image}
+                handle_existing_presentation_uuid={
+                    handle_existing_presentation_uuid
+                }
+                toggle_should_take_in_existing_presentation_uuid={
+                    toggle_should_take_in_existing_presentation_uuid
+                }
+            />
         </div>
     )
 }

@@ -4,13 +4,11 @@ import Input from './Input'
 
 interface Props {
     upload_image: (e: React.ChangeEvent<HTMLInputElement>) => void
-    start_presentation: () => void
     toggle_should_take_in_existing_presentation_uuid: () => void
 }
 
 function Pane({
     upload_image,
-    start_presentation,
     toggle_should_take_in_existing_presentation_uuid,
 }: Props) {
     return (
@@ -26,10 +24,6 @@ function Pane({
                 accepted_file_types="image/*"
                 input_placeholder="Upload Image"
                 input_function={upload_image}
-            />
-            <Button
-                button_text="Present"
-                button_function={start_presentation}
             />
         </div>
     )

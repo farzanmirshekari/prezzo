@@ -14,7 +14,7 @@ function Input({
     input_function,
 }: Props) {
     return (
-        <label className="relative w-1/3 h-full flex flex-row justify-center items-center text-center text-base input">
+        <label className="relative w-1/2 h-full flex flex-row justify-center items-center text-center text-base input">
             <input
                 className="hidden"
                 type={input_type}

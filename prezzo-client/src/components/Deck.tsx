@@ -17,7 +17,6 @@ function Deck({ presentation_slides }: Props) {
                         body={slide.body}
                         image={slide.image}
                         styles={slide.styles}
-                        presentation_mode={false}
                     />
                 )
             })}
