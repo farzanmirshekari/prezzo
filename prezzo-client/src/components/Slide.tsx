@@ -31,7 +31,7 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
             }}
         >
             <div
-                className="relative w-full h-full flex flex-row justify-start"
+                className="relative w-full h-full flex justify-start"
                 style={{
                     backgroundColor: styles.background_color,
                     color: styles.text_color,
@@ -40,45 +40,41 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
             >
                 {header && !body && !image && (
                     <div
-                        className="relative w-full h-full flex justify-start items-start"
+                        className="relative w-fit h-min flex justify-center items-start"
                         style={{
                             top: presentation_mode ? '2em' : `${4 / 3}em`,
-                            left: presentation_mode ? '4em' : `${8 / 3}em`,
                         }}
                     >
                         <Header
                             header={header}
-                            classes="relative w-11/12 h-min text-8xl"
+                            classes="relative w-11/12 h-auto text-8xl"
                             presentation_mode={presentation_mode}
                         />
                     </div>
                 )}
                 {header && body && !image && (
-                    <div className="relative w-full h-full flex justify-start items-start">
+                    <div className="relative w-full h-full flex flex-col justify-between items-start">
                         <div
-                            className="relative w-5/12 h-auto"
+                            className="relative flex w-full h-auto justify-center"
                             style={{
                                 top: presentation_mode ? '2em' : `${4 / 3}em`,
-                                left: presentation_mode ? '3em' : '2em',
                             }}
                         >
                             <Header
                                 header={header}
-                                classes="relative w-auto h-auto text-8xl"
+                                classes="relative w-11/12 h-auto text-8xl"
                                 presentation_mode={presentation_mode}
                             />
                         </div>
-                        <div id="filler" className="relative w-1/12"></div>
                         <div
-                            className="relative w-5/12 h-auto"
+                            className="relative flex w-full h-auto justify-center"
                             style={{
-                                top: presentation_mode ? '4em' : `${8 / 3}em`,
-                                left: presentation_mode ? '7em' : `${14 / 3}em`,
+                                bottom: presentation_mode ? '4em' : `${8 / 3}em`,
                             }}
                         >
                             <Body
                                 body={body}
-                                classes="relative w-full h-auto text-4xl"
+                                classes="relative w-11/12 h-auto text-4xl"
                                 presentation_mode={presentation_mode}
                             />
                         </div>
