@@ -164,7 +164,7 @@ function Slide({ header, body, image, styles, presentation_mode }: Props) {
                                 classes="relative h-full object-cover"
                             />
                         </div>
-                    </div>   
+                    </div>
                 )}
                 {!header && !body && image && (
                     <>
