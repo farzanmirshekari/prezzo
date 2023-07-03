@@ -87,12 +87,15 @@ function Slide({ header, body, image, styles }: Props) {
                 )}
                 {!header && body && !image && (
                     <div
-                        className="relative w-full h-full flex justify-center leading-10"
+                        className="relative w-full h-full flex justify-center"
                         style={{
-                            top: '10%',
+                            top: '7%',
                         }}
                     >
-                        <Body body={body} classes="relative w-11/12 text-5xl" />
+                        <Body
+                            body={body}
+                            classes="relative w-11/12 text-5xl leading-normal"
+                        />
                     </div>
                 )}
                 {!header && body && image && (
@@ -125,11 +128,11 @@ function Slide({ header, body, image, styles }: Props) {
                         >
                             <Header
                                 header={header}
-                                classes="relative w-11/12 h-auto text-7xl"
+                                classes="relative w-11/12 pl-1 h-auto text-7xl"
                             />
                             <Body
                                 body={body}
-                                classes="relative w-11/12 h-auto text-3xl"
+                                classes="relative w-11/12 pl-2 h-auto text-3xl leading-snug"
                             />
                         </div>
                         <div className="relative w-5/12 h-full flex justify-end items-center">
