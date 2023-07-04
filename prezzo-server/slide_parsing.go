@@ -13,7 +13,7 @@ func get_text_colors(presentation_content raw_content, slides_count int) []strin
 	text_color_regex := regexp.MustCompile(`text-color-all:\s*(.*?)\s*;`)
 	text_color := filter_string_by_regex(presentation_content.Text_Content, text_color_regex)
 	if text_color == "" {
-		text_color = "#000000"
+		text_color = "#ffffff"
 	}
 	text_colors := make([]string, slides_count)
 	for i := range text_colors {
@@ -26,7 +26,7 @@ func get_background_colors(presentation_content raw_content, slides_count int) [
 	background_color_scheme_regex := regexp.MustCompile(`background-color-all:\s*(.*?)\s*;`)
 	color_scheme := filter_string_by_regex(presentation_content.Text_Content, background_color_scheme_regex)
 	if color_scheme == "" {
-		color_scheme = "#427ef5 tint"
+		color_scheme = "#111236"
 	}
 	color_scheme_split := strings.Split(color_scheme, " ")
 	if len(color_scheme_split) < 2 {
